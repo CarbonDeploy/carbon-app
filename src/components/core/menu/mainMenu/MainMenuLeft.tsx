@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Link, useRouterState } from 'libs/routing';
-import { ReactComponent as LogoCarbon } from 'assets/logos/carbon.svg';
+import { ReactComponent as LogoDna } from 'assets/logos/dna_logo.svg';
 import { getMenuItems } from 'components/core/menu';
 import { useWagmi } from 'libs/wagmi';
 
@@ -26,7 +26,7 @@ export const MainMenuLeft: FC = () => {
       data-testid="main-nav"
     >
       <Link to="/">
-        <LogoCarbon className="w-34" />
+        <LogoDna className="h-32 w-auto text-white" />
       </Link>
 
       <div className="hidden md:flex gap-8 tab-list rounded-xl">
