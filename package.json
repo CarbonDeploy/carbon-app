@@ -87,6 +87,7 @@
     "compile-abis": "typechain --target ethers-v6 --out-dir \"src/abis/types\" \"src/abis/**/*.json\"",
     "prepare": "yarn husky install",
     "start": "vite",
+    "start:bsc": "cross-env VITE_NETWORK=bsc vite",
     "start:ethereum": "cross-env VITE_NETWORK=ethereum vite",
     "start:sei": "cross-env VITE_NETWORK=sei vite",
     "start:celo": "cross-env VITE_NETWORK=celo vite",
