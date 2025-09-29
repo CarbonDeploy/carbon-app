@@ -12,6 +12,8 @@ import tacDev from './tac/development';
 import tacProd from './tac/production';
 import tonDev from './ton/development';
 import tonProd from './ton/production';
+import bscDev from './bsc/development';
+import bscProd from './bsc/production';
 import { handleConfigOverrides } from './utils';
 
 const configs = {
@@ -42,6 +44,10 @@ const configs = {
   ton: {
     development: tonDev,
     production: tonProd,
+  },
+  bsc: {
+    development: bscDev,
+    production: bscProd,
   },
 };
 type Network = keyof typeof configs;
