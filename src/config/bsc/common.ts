@@ -23,8 +23,8 @@ const popularTokens = [
 export const commonConfig: AppConfig = {
   mode: 'development',
   appName: 'BSC - Carbon DeFi',
-  appUrl: 'https://localhost:3000',
-  carbonApi: 'http://localhost:8080/v1/', // You'll need to check with Carbon team for actual API endpoint
+  appUrl: 'http://localhost:3000',
+  carbonApi: 'http://159.65.50.90/v1/',
   selectedConnectors: ['MetaMask', 'WalletConnect', 'Coinbase Wallet', 'Safe'],
   blockedConnectors: ['Tailwind', 'Compass Wallet', 'Seif'],
   walletConnectProjectId: 'YOUR_WALLET_CONNECT_PROJECT_ID', // Add your project ID
