@@ -10,7 +10,6 @@ import { useModal } from 'hooks/useModal';
 import { QueryKey } from 'libs/queries';
 import { CHAIN_ID, RPC_URLS, RPC_HEADERS } from 'libs/wagmi';
 import { buildTokenPairKey, setIntervalUsingTimeout } from 'utils/helpers';
-import { carbonApi } from 'utils/carbonApi';
 import { ONE_HOUR_IN_MS } from 'utils/time';
 import config from 'config';
 
@@ -139,7 +138,7 @@ export const useCarbonInit = () => {
   const initCheck = useCallback(async () => {
     try {
       lsService.migrateItems();
-      const isBlocked = await carbonApi.getCheck();
+      const isBlocked = true; // await carbonApi.getCheck();
       setCountryBlocked(isBlocked);
       if (isBlocked && !lsService.getItem('hasSeenRestrictedCountryModal')) {
         openModal('restrictedCountry', undefined);
