@@ -1,44 +1,44 @@
-import ethereumDev from './ethereum/development';
-import ethereumProd from './ethereum/production';
-import seiDev from './sei/development';
-import seiProd from './sei/production';
-import celoDev from './celo/development';
-import celoProd from './celo/production';
-import cotiDev from './coti/development';
-import cotiProd from './coti/production';
-import blastDev from './blast/development';
-import blastProd from './blast/production';
-import tacDev from './tac/development';
-import tacProd from './tac/production';
+// import ethereumDev from './ethereum/development';
+// import ethereumProd from './ethereum/production';
+// import seiDev from './sei/development';
+// import seiProd from './sei/production';
+// import celoDev from './celo/development';
+// import celoProd from './celo/production';
+// import cotiDev from './coti/development';
+// import cotiProd from './coti/production';
+// import blastDev from './blast/development';
+// import blastProd from './blast/production';
+// import tacDev from './tac/development';
+// import tacProd from './tac/production';
 import bscDev from './bsc/development';
 import bscProd from './bsc/production';
 import { handleConfigOverrides } from './utils';
 
 const configs = {
-  ethereum: {
-    development: ethereumDev,
-    production: ethereumProd,
-  },
-  sei: {
-    development: seiDev,
-    production: seiProd,
-  },
-  celo: {
-    development: celoDev,
-    production: celoProd,
-  },
-  coti: {
-    development: cotiDev,
-    production: cotiProd,
-  },
-  blast: {
-    development: blastDev,
-    production: blastProd,
-  },
-  tac: {
-    development: tacDev,
-    production: tacProd,
-  },
+  // ethereum: {
+  //   development: ethereumDev,
+  //   production: ethereumProd,
+  // },
+  // sei: {
+  //   development: seiDev,
+  //   production: seiProd,
+  // },
+  // celo: {
+  //   development: celoDev,
+  //   production: celoProd,
+  // },
+  // coti: {
+  //   development: cotiDev,
+  //   production: cotiProd,
+  // },
+  // blast: {
+  //   development: blastDev,
+  //   production: blastProd,
+  // },
+  // tac: {
+  //   development: tacDev,
+  //   production: tacProd,
+  // },
   bsc: {
     development: bscDev,
     production: bscProd,
