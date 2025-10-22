@@ -25,7 +25,7 @@ export const commonConfig: AppConfig = {
   appName: 'BSC - Carbon DeFi',
   appUrl: 'https://carbon-app-4qox9.ondigitalocean.app',
   carbonApi: 'https://159.65.50.90.sslip.io/v1/',
-  selectedConnectors: ['MetaMask', 'WalletConnect', 'Coinbase Wallet', 'Safe'],
+  selectedConnectors: ['MetaMask', 'Coinbase Wallet', 'Safe'],
   blockedConnectors: ['Tailwind', 'Compass Wallet', 'Seif'],
   walletConnectProjectId: 'YOUR_WALLET_CONNECT_PROJECT_ID', // Add your project ID
   policiesLastUpdated: '27 Sep, 2025',
