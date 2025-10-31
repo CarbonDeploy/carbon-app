@@ -6,9 +6,14 @@ const addresses = {
   WBNB: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c', // Wrapped BNB
   USDT: '0x55d398326f99059fF775485246999027B3197955',
   USDC: '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d',
-  ETH: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
+  WETH: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
   BTCB: '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c',
   ZERO: '0x0000000000000000000000000000000000000000',
+  LINK: '0xf8a0bf9cf54bb92f17374d9e9a321e6a111a51bd',
+  UNI: '0xbf5140a22578168fd562dccf235e5d43a02ce9b1',
+  AAVE: '0xfb6115445bff7b52feb98650c87f44907e58f802',
+  COMP: '0x52ce071bd9b1c4b00a0b92d298c512478cad67e8',
+  SUSHI: '0x947950bcc74888a40ffa2593c5798f11fc9124c4',
 };
 
 const popularTokens = [
@@ -16,13 +21,18 @@ const popularTokens = [
   addresses.WBNB,
   addresses.USDT,
   addresses.USDC,
-  addresses.ETH,
+  addresses.WETH,
   addresses.BTCB,
+  addresses.LINK,
+  addresses.UNI,
+  addresses.AAVE,
+  addresses.COMP,
+  addresses.SUSHI,
 ];
 
 export const commonConfig: AppConfig = {
   mode: 'development',
-  appName: 'BSC - Carbon DeFi',
+  appName: 'BSC - DNA DeFi',
   appUrl: 'https://carbon-app-4qox9.ondigitalocean.app',
   carbonApi: 'https://159.65.50.90.sslip.io/v1/',
   selectedConnectors: ['MetaMask', 'Coinbase Wallet', 'Safe'],
@@ -65,8 +75,20 @@ export const commonConfig: AppConfig = {
     [addresses.BNB, addresses.USDC],
     [addresses.WBNB, addresses.USDT],
     [addresses.WBNB, addresses.USDC],
-    [addresses.ETH, addresses.USDT],
+    [addresses.WETH, addresses.USDT],
+    [addresses.WETH, addresses.USDC],
     [addresses.BTCB, addresses.USDT],
+    [addresses.BTCB, addresses.USDC],
+    [addresses.LINK, addresses.USDT],
+    [addresses.LINK, addresses.USDC],
+    [addresses.UNI, addresses.USDT],
+    [addresses.UNI, addresses.USDC],
+    [addresses.AAVE, addresses.USDT],
+    [addresses.AAVE, addresses.USDC],
+    [addresses.COMP, addresses.USDT],
+    [addresses.COMP, addresses.USDC],
+    [addresses.SUSHI, addresses.USDT],
+    [addresses.SUSHI, addresses.USDC],
   ],
   popularTokens: {
     base: popularTokens,
@@ -87,14 +109,6 @@ export const commonConfig: AppConfig = {
     },
   },
   tokenListOverride: [
-    {
-      name: 'BNB',
-      symbol: 'BNB',
-      decimals: 18,
-      address: addresses.BNB,
-      logoURI:
-        'https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png',
-    },
     {
       name: 'Wrapped BNB',
       symbol: 'WBNB',
