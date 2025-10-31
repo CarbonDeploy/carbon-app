@@ -3,12 +3,14 @@ import { ClassValue, clsx } from 'clsx';
 import { Pathnames } from 'libs/routing';
 import { customTwMerge } from 'libs/twmerge';
 import { TradePair } from 'components/strategies/common/types';
+import config from 'config';
 export * from './number';
 export * from './schema';
 
-export const isProduction = window
-  ? window.location.host.includes('carbondefi.xyz')
-  : true;
+export const isProduction = config.mode === 'production';
+// export const isProduction = window
+//   ? window.location.host.includes('carbondefi.xyz')
+//   : true;
 
 export const uuid = () => {
   return 'xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
