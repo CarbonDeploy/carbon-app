@@ -65,7 +65,7 @@ const SimulatorDisclaimer = () => {
           This tool is for informational purposes only and operates under
           simplified conditions. It excludes gas fees, does not support fee on
           transfer (tax) or rebase tokens, and may lack accuracy or
-          completeness. Bancor accepts no liability for its use.
+          completeness. DNA accepts no liability for its use.
         </p>
       </hgroup>
 
