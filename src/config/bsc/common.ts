@@ -141,7 +141,7 @@ export const commonConfig: AppConfig = {
   },
   ui: {
     showSimulator: true,
-    priceChart: 'tradingView',
+    priceChart: 'native',
     useGradientBranding: false,
     tradeCount: true,
     currencyMenu: true,
