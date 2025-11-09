@@ -14,6 +14,7 @@ const addresses = {
   AAVE: '0xfb6115445bff7b52feb98650c87f44907e58f802',
   COMP: '0x52ce071bd9b1c4b00a0b92d298c512478cad67e8',
   SUSHI: '0x947950bcc74888a40ffa2593c5798f11fc9124c4',
+  USD1: '0x8d0d000ee44948fc98c9b98a4fa4921476f08b0d',
 };
 
 const popularTokens = [
@@ -28,6 +29,7 @@ const popularTokens = [
   addresses.AAVE,
   addresses.COMP,
   addresses.SUSHI,
+  addresses.USD1,
 ];
 
 export const commonConfig: AppConfig = {
@@ -89,6 +91,9 @@ export const commonConfig: AppConfig = {
     [addresses.COMP, addresses.USDC],
     [addresses.SUSHI, addresses.USDT],
     [addresses.SUSHI, addresses.USDC],
+    [addresses.USD1, addresses.USDT],
+    [addresses.USD1, addresses.USDC],
+    [addresses.USDT, addresses.USDC],
   ],
   popularTokens: {
     base: popularTokens,
