@@ -11,7 +11,6 @@ import { SVGCarbonLogo } from 'components/common/SVGCarbonLogo';
 import { SVGGradient } from 'components/common/SVGGradient';
 import { lsService } from 'services/localeStorage';
 import { useModal } from 'hooks/useModal';
-import { carbonApi } from 'utils/carbonApi';
 
 export const App = () => {
   const { setInnerHeight, setCountryBlocked } = useStore();
@@ -22,7 +21,7 @@ export const App = () => {
   const initCheck = useCallback(async () => {
     try {
       lsService.migrateItems();
-      const isBlocked = await carbonApi.getCheck();
+      const isBlocked = false; // await carbonApi.getCheck();
       setCountryBlocked(isBlocked);
       if (isBlocked && !lsService.getItem('hasSeenRestrictedCountryModal')) {
         openModal('restrictedCountry', undefined);
