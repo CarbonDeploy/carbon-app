@@ -52,7 +52,13 @@ export default defineConfig(({ mode }) => {
     optimizeDeps: {
       // @safe-global/safe-apps-provider is included here as vite isn't pre-bundling the conditional safe-apps-provider import in the wagmi safe connector
       // which leads to the safe connector not working in dev mode (error "SafeAppProvider is not a constructor")
-      include: ['@safe-global/safe-apps-provider'],
+      include: [
+        '@safe-global/safe-apps-provider',
+        '@ton/ton',
+        '@ton/core',
+        '@tonappchain/sdk',
+        '@tonconnect/ui-react',
+      ],
     },
     build: {
       outDir: 'build',
