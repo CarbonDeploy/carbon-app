@@ -1,0 +1,111 @@
+.swap-widget .MuiTabs-root {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.swap-widget .MuiTabs-root .MuiTabs-flexContainer {
+  gap: 6px;
+  position: relative;
+  z-index: 1;
+}
+
+.swap-widget .MuiTab-root {
+  min-width: unset;
+  min-height: 0;
+  padding: 6px 8px;
+  border-radius: 999px;
+  text-transform: none;
+  font-size: 14px;
+  font-weight: 400;
+  font-family: Carbon-Text, system-ui, sans-serif;
+  line-height: 1.2;
+  transition: color 150ms ease, transform 120ms ease;
+  color: rgba(255, 255, 255, 0.64);
+}
+
+@media (min-width: 768px) {
+  .swap-widget .MuiTab-root {
+    padding: 8px 10px;
+    font-size: 16px;
+  }
+}
+
+.swap-widget .MuiTab-root:hover {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.swap-widget .MuiTab-root.Mui-selected {
+  color: white;
+  transform: translateZ(0);
+}
+
+.swap-widget .MuiTabs-root .MuiTabs-indicator {
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    oklch(0.62 0.06 var(--hue) / 0.4) 0%,
+    oklch(0.53 0.06 var(--hue) / 0.45) 100%
+  );
+  box-shadow: var(--glass-shadow);
+  border: 1px solid transparent;
+  transition: transform 380ms var(--ease-in-out), width 380ms var(--ease-in-out),
+    left 380ms var(--ease-in-out);
+  z-index: 0;
+}
+
+.swap-widget .MuiTabs-root .MuiTab-root.Mui-disabled {
+  opacity: 0.4;
+}
+
+.swap-widget .MuiButton-containedPrimary {
+  --gradient-direction: 180deg;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.1;
+  font-family: Carbon-Text, system-ui, sans-serif;
+  padding: 10px 16px;
+  background: var(--main-gradient);
+  color: var(--color-black);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 5px 12px rgba(9, 12, 24, 0.35);
+  transition: color 120ms var(--ease-out), transform 120ms var(--ease-out),
+    background 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
+}
+
+@media (min-width: 768px) {
+  .swap-widget .MuiButton-containedPrimary {
+    font-size: 16px;
+    padding: 12px 20px;
+  }
+}
+
+.swap-widget .MuiButton-containedPrimary:hover {
+  color: white;
+  background: linear-gradient(180deg, #50C58A 0%, var(--color-secondary) 100%);
+  box-shadow: 0 8px 16px rgba(9, 12, 24, 0.45);
+}
+
+.swap-widget .MuiButton-containedPrimary:active {
+  transform: scale(0.96);
+}
+
+.swap-widget .MuiButton-containedPrimary.Mui-disabled {
+  opacity: 0.45;
+  box-shadow: none;
+  color: rgba(255, 255, 255, 0.7);
+  background: var(--main-gradient);
+}
+
