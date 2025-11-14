@@ -1,9 +1,6 @@
 import { ReactElement, useMemo, useState } from 'react';
 import { externalLinks, NewTabLink, Link } from 'libs/routing';
 import { ReactComponent as IconX } from 'assets/logos/x.svg';
-import { ReactComponent as IconYoutube } from 'assets/logos/youtube.svg';
-import { ReactComponent as IconDiscord } from 'assets/logos/discord.svg';
-import { ReactComponent as IconTelegram } from 'assets/logos/telegram.svg';
 import { ForwardArrow } from 'components/common/forwardArrow';
 import config from 'config';
 
@@ -22,15 +19,6 @@ export const useBurgerMenuItems = () => {
 
     /** Main Menu */
     const mainItems: Menu = [
-      <button
-        key="resources"
-        role="menuitem"
-        onClick={() => setCurrentMenu('resources')}
-        className={menuitemClass}
-      >
-        <span>Resources</span>
-        <ForwardArrow className="ml-auto" />
-      </button>,
       <NewTabLink
         key="faq"
         role="menuitem"
@@ -38,14 +26,6 @@ export const useBurgerMenuItems = () => {
         to={externalLinks.faq}
       >
         FAQ
-      </NewTabLink>,
-      <NewTabLink
-        key="blog"
-        role="menuitem"
-        className={menuitemClass}
-        to={externalLinks.blog}
-      >
-        Blog
       </NewTabLink>,
     ];
     if (externalLinks.analytics) {
@@ -87,27 +67,6 @@ export const useBurgerMenuItems = () => {
           to={externalLinks.x}
         >
           <IconX className={iconStyles} />
-        </NewTabLink>
-        <NewTabLink
-          role="menuitem"
-          className={menuitemClass}
-          to={externalLinks.youtube}
-        >
-          <IconYoutube className={iconStyles} />
-        </NewTabLink>
-        <NewTabLink
-          role="menuitem"
-          className={menuitemClass}
-          to={externalLinks.discord}
-        >
-          <IconDiscord className={iconStyles} />
-        </NewTabLink>
-        <NewTabLink
-          role="menuitem"
-          className={menuitemClass}
-          to={externalLinks.telegram}
-        >
-          <IconTelegram className={iconStyles} />
         </NewTabLink>
       </footer>,
     );

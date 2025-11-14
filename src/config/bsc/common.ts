@@ -41,6 +41,10 @@ export const commonConfig: AppConfig = {
   blockedConnectors: ['Tailwind', 'Compass Wallet', 'Seif'],
   walletConnectProjectId: 'YOUR_WALLET_CONNECT_PROJECT_ID', // Add your project ID
   policiesLastUpdated: '27 Sep, 2025',
+  externalLinks: {
+    duneDashboard:
+      'https://dune.com/dnatrading/dnax/b8b91a92-88fd-48fc-bde3-f3791b084e68',
+  },
   network: {
     name: 'BSC',
     logoUrl: IconBSCLogo,
