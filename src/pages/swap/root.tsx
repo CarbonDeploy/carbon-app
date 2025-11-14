@@ -12,7 +12,7 @@ export const SwapPage = () => {
     appearance: 'dark',
     referrer: {
       address: '0x2157A23bB2A40bcE7A6678Cb853fCb49f858b418',
-      fee: '0.011',
+      fee: '0.25',
     },
     slippage: 0.01,
     theme: {
