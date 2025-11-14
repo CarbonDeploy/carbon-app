@@ -11,6 +11,11 @@ export interface MenuItem {
 export const getMenuItems = (user?: string) => {
   const items = [
     {
+      label: 'Swap',
+      href: '/swap',
+      testid: 'swap-page',
+    },
+    {
       label: 'Trade',
       href: '/trade',
       testid: 'trade-page',
@@ -22,7 +27,7 @@ export const getMenuItems = (user?: string) => {
     },
   ];
   if (user) {
-    items.unshift({
+    items.splice(1, 0, {
       label: 'Portfolio',
       href: '/portfolio',
       testid: 'my-strategies-page',
@@ -46,6 +51,11 @@ export const getMenuItems = (user?: string) => {
 };
 
 export const menuItems: MenuItem[] = [
+  {
+    label: 'Swap',
+    href: '/swap',
+    testid: 'swap-page',
+  },
   {
     label: 'Portfolio',
     href: '/portfolio',
