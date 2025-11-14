@@ -24,7 +24,7 @@ const tabs = [
     id: 'basic',
     items: [
       {
-        to: '/trade/market',
+        to: '/swap',
         icon: <IconMarket className="size-24" />,
         title: 'Swap',
         search: {},
