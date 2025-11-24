@@ -34,9 +34,10 @@ export const MainMenuRightWallet: FC = () => {
     return 'btn-on-background text-16';
   }, [isSupportedNetwork, isUserBlocked, user]);
 
+  const allowUnsupportedNetwork = location.pathname.startsWith('/swap');
   const buttonText = useMemo(() => {
     if (isUserBlocked) return 'Wallet Blocked';
-    if (!isSupportedNetwork) return 'Wrong Network';
+    if (!isSupportedNetwork && !allowUnsupportedNetwork) return 'Wrong Network';
     if (!user) {
       if (location.pathname === '/') return 'Launch App';
       return 'Connect Wallet';

@@ -21,6 +21,7 @@ const paths: Record<string, Pathnames> = {
   debug: '/debug',
   terms: '/terms',
   privacy: '/privacy',
+  swap: '/swap',
 };
 
 export const MainContent: FC = () => {
@@ -44,7 +45,8 @@ export const MainContent: FC = () => {
   if (
     location.pathname === paths.debug ||
     location.pathname === paths.terms ||
-    location.pathname === paths.privacy
+    location.pathname === paths.privacy ||
+    location.pathname === paths.swap
   ) {
     return <Outlet />;
   }
