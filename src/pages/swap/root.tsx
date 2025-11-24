@@ -1,10 +1,8 @@
 import { OpenOceanWidget } from '@openocean.finance/widget';
 import { WidgetConfig } from '@openocean.finance/widget/dist/esm/types/widget';
 import './root.css';
-import { useWagmi } from 'libs/wagmi';
 
 export const SwapPage = () => {
-  const { openConnect } = useWagmi();
   const widgetConfig: WidgetConfig = {
     integrator: 'DNA',
     variant: 'compact',
@@ -100,12 +98,7 @@ export const SwapPage = () => {
         },
       },
     },
-    walletConfig: {
-      onConnect: () => {
-        openConnect();
-      },
-      usePartialWalletManagement: true,
-    },
+
     chains: {
       allow: [
         56, 1, 1151111081099710, 42161, 10, 324, 137, 43114, 250, 146, 80094,

@@ -26,15 +26,18 @@ export const MainMenuRightWallet: FC = () => {
   const selectedWallet = currentConnector?.name;
 
   const { data: ensName } = useGetEnsFromAddress(user || '');
+  const isSwapPage = location.pathname.startsWith('/swap');
+  const allowUnsupportedNetwork = isSwapPage;
+  const disableConnectButton = isSwapPage && !user;
 
   const buttonVariant = useMemo(() => {
     if (isUserBlocked) return 'btn-error-gradient text-16';
-    if (!isSupportedNetwork) return 'btn-error-gradient text-16';
+    if (!isSupportedNetwork && !allowUnsupportedNetwork)
+      return 'btn-error-gradient text-16';
     if (!user) return 'btn-primary-gradient px-16 py-8 text-16';
     return 'btn-on-background text-16';
-  }, [isSupportedNetwork, isUserBlocked, user]);
+  }, [allowUnsupportedNetwork, isSupportedNetwork, isUserBlocked, user]);
 
-  const allowUnsupportedNetwork = location.pathname.startsWith('/swap');
   const buttonText = useMemo(() => {
     if (isUserBlocked) return 'Wallet Blocked';
     if (!isSupportedNetwork && !allowUnsupportedNetwork) return 'Wrong Network';
@@ -43,11 +46,19 @@ export const MainMenuRightWallet: FC = () => {
       return 'Connect Wallet';
     }
     return shortenString(ensName || user);
-  }, [ensName, isSupportedNetwork, isUserBlocked, location.pathname, user]);
+  }, [
+    allowUnsupportedNetwork,
+    ensName,
+    isSupportedNetwork,
+    isUserBlocked,
+    location.pathname,
+    user,
+  ]);
 
   const buttonIcon = useMemo(() => {
     if (isUserBlocked) return <IconWarning className={iconClass} />;
-    if (!isSupportedNetwork) return <IconWarning className={iconClass} />;
+    if (!isSupportedNetwork && !allowUnsupportedNetwork)
+      return <IconWarning className={iconClass} />;
     if (!user) return;
     return (
       <WalletIcon
@@ -58,6 +69,7 @@ export const MainMenuRightWallet: FC = () => {
       />
     );
   }, [
+    allowUnsupportedNetwork,
     isUserBlocked,
     isSupportedNetwork,
     user,
@@ -89,8 +101,18 @@ export const MainMenuRightWallet: FC = () => {
 
   return (
     <button
-      onClick={openConnect}
-      className={cn(buttonVariant, 'flex items-center gap-8 px-16')}
+      onClick={disableConnectButton ? undefined : openConnect}
+      disabled={disableConnectButton}
+      title={
+        disableConnectButton
+          ? 'Use the widget wallet controls to bridge or swap on other networks.'
+          : undefined
+      }
+      className={cn(
+        buttonVariant,
+        'flex items-center gap-8 px-16',
+        disableConnectButton && 'cursor-not-allowed opacity-60',
+      )}
     >
       {buttonIcon}
       <span>{buttonText}</span>
@@ -103,6 +125,8 @@ const ConnectedMenu: FC = () => {
   const { setMenuOpen } = useMenuCtx();
   const { user, disconnect, isSupportedNetwork, switchNetwork } = useWagmi();
   const nav = useNavigate();
+  const { location } = useRouterState();
+  const allowUnsupportedNetwork = location.pathname.startsWith('/swap');
 
   const signout = async () => {
     await disconnect();
@@ -118,7 +142,7 @@ const ConnectedMenu: FC = () => {
 
   return (
     <div role="menu" className="font-normal grid gap-4 text-white">
-      {isSupportedNetwork ? (
+      {isSupportedNetwork || allowUnsupportedNetwork ? (
         <>
           <button
             role="menuitem"
