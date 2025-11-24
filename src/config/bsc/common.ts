@@ -54,7 +54,7 @@ export const commonConfig: AppConfig = {
       url: 'https://bscscan.com',
     },
     rpc: {
-      url: 'https://bsc-dataseed1.defibit.io',
+      url: 'https://bsc-dataseed1.bnbchain.org',
       headers: {},
     },
     defaultLimitedApproval: true,
