@@ -46,7 +46,7 @@ export const commonConfig: AppConfig = {
       'https://dune.com/dnatrading/dnax/b8b91a92-88fd-48fc-bde3-f3791b084e68',
   },
   network: {
-    name: 'BSC',
+    name: 'BNB Smart Chain Mainnet',
     logoUrl: IconBSCLogo,
     chainId: 56, // BSC Mainnet chain ID
     blockExplorer: {
@@ -54,9 +54,7 @@ export const commonConfig: AppConfig = {
       url: 'https://bscscan.com',
     },
     rpc: {
-      url:
-        import.meta.env.VITE_CHAIN_RPC_URL ??
-        'https://bsc-dataseed.binance.org/',
+      url: 'https://bsc-dataseed1.bnbchain.org',
       headers: {},
     },
     defaultLimitedApproval: true,
