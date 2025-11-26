@@ -34,7 +34,7 @@ const popularTokens = [
 
 export const commonConfig: AppConfig = {
   mode: 'development',
-  appName: 'BSC - DNA DeFi',
+  appName: 'BSC - DNAX DeFi',
   appUrl: 'https://carbon-app-4qox9.ondigitalocean.app',
   carbonApi: 'https://159.65.50.90.sslip.io/v1/',
   selectedConnectors: ['MetaMask', 'Coinbase Wallet', 'Safe'],

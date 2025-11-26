@@ -229,7 +229,7 @@ const CarbonTonWagmiProvider = ({ children }: { children: ReactNode }) => {
 
         const [sdk, sender, allAssets] = await Promise.all([
           getTacSDK(),
-          SenderFactory.getSender({ tonConnect: tonConnectUI }),
+          SenderFactory.getSender({ tonConnect: tonConnectUI as any }),
           getAllAssets,
         ]);
         const parsed = parseTransaction(tx);
