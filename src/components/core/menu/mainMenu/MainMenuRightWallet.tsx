@@ -26,9 +26,7 @@ export const MainMenuRightWallet: FC = () => {
   const selectedWallet = currentConnector?.name;
 
   const { data: ensName } = useGetEnsFromAddress(user || '');
-  const isSwapPage = location.pathname.startsWith('/swap');
-  const allowUnsupportedNetwork = isSwapPage;
-  const disableConnectButton = isSwapPage && !user;
+  const allowUnsupportedNetwork = location.pathname.startsWith('/swap');
 
   const buttonVariant = useMemo(() => {
     if (isUserBlocked) return 'btn-error-gradient text-16';
@@ -101,18 +99,8 @@ export const MainMenuRightWallet: FC = () => {
 
   return (
     <button
-      onClick={disableConnectButton ? undefined : openConnect}
-      disabled={disableConnectButton}
-      title={
-        disableConnectButton
-          ? 'Use the widget wallet controls to bridge or swap on other networks.'
-          : undefined
-      }
-      className={cn(
-        buttonVariant,
-        'flex items-center gap-8 px-16',
-        disableConnectButton && 'cursor-not-allowed opacity-60',
-      )}
+      onClick={openConnect}
+      className={cn(buttonVariant, 'flex items-center gap-8 px-16')}
     >
       {buttonIcon}
       <span>{buttonText}</span>

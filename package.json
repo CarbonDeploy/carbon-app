@@ -9,7 +9,7 @@
     "@cloudflare/workers-types": "4.20230717.0",
     "@floating-ui/react": "0.25.4",
     "@oddbird/popover-polyfill": "0.5.2",
-    "@openocean.finance/widget": "^1.0.43",
+    "@openocean.finance/widget": "^1.0.44",
     "@playwright/test": "1.52.0",
     "@sentry/react": "8.17.0",
     "@sentry/vite-plugin": "2.21.1",
