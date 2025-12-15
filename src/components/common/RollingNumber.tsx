@@ -6,6 +6,8 @@ interface Props {
   value?: number;
   className?: string;
   delay?: number;
+  /** Delta to remove from the value at initialization, will be added in rolling animation */
+  initDelta?: number;
   loadingWidth: string;
   format: (value: number) => string;
 }
@@ -16,6 +18,7 @@ export const RollingNumber = ({
   delay,
   className,
   loadingWidth,
+  initDelta = 0,
 }: Props) => {
   const ref = useRef<HTMLParagraphElement>(null);
   const anims = useRef<Promise<Animation>[]>(null);
@@ -80,7 +83,7 @@ export const RollingNumber = ({
     return () => {
       tradesChanged = true;
     };
-  }, [format, value, delay]);
+  }, [format, value, delay, initDelta]);
 
   if (typeof value !== 'number' || !value) {
     return <Loading height={40} width={loadingWidth} fontSize="36px" />;

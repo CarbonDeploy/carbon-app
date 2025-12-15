@@ -1,23 +1,23 @@
-import { ModalFC } from 'libs/modals/modals.types';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { ReactComponent as IconError } from 'assets/icons/times.svg';
+import IconWarning from 'assets/icons/warning.svg?react';
+import IconError from 'assets/icons/times.svg?react';
 import { ReactNode, useMemo } from 'react';
 import { useModal } from 'hooks/useModal';
-import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
+import { Modal, ModalHeader } from 'libs/modals/Modal';
+import { ModalProps } from '../modals.types';
 
-export type ModalGenericInfoData = {
+interface ModalGenericInfoData {
   title: string;
   text?: string | ReactNode;
   variant?: 'warning' | 'error';
   onConfirm: () => any;
   buttonLabel?: string;
-};
+}
 
-export const ModalGenericInfo: ModalFC<ModalGenericInfoData> = ({
+export default function ModalGenericInfo({
   id,
   data: { variant = 'error', title, text, buttonLabel = 'Confirm', onConfirm },
-}) => {
+}: ModalProps<ModalGenericInfoData>) {
   const { closeModal } = useModal();
 
   const icon = useMemo(() => {
@@ -32,8 +32,9 @@ export const ModalGenericInfo: ModalFC<ModalGenericInfoData> = ({
   }, [variant]);
 
   return (
-    <ModalOrMobileSheet id={id}>
-      <div className="my-20">
+    <Modal id={id} className="grid gap-16">
+      <ModalHeader id={id} />
+      <div>
         <IconTitleText
           variant={variant}
           icon={icon}
@@ -53,6 +54,6 @@ export const ModalGenericInfo: ModalFC<ModalGenericInfoData> = ({
       <button className="btn-on-surface" onClick={() => closeModal(id)}>
         Cancel
       </button>
-    </ModalOrMobileSheet>
+    </Modal>
   );
-};
+}

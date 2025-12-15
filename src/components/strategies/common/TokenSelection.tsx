@@ -1,10 +1,10 @@
 import { useNavigate } from 'libs/routing';
 import { TokenLogo } from 'components/common/imager/Imager';
-import { ReactComponent as ChevronIcon } from 'assets/icons/chevron.svg';
-import { ReactComponent as ForwardArrowIcon } from 'assets/icons/arrow.svg';
+import ChevronIcon from 'assets/icons/chevron.svg?react';
+import ForwardArrowIcon from 'assets/icons/arrow.svg?react';
 import { Token } from 'libs/tokens';
 import { useModal } from 'hooks/useModal';
-import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList';
+import { ModalTokenListData } from 'libs/modals/modals/ModalTokenList/types';
 import { SuspiciousToken } from 'components/common/DisplayPair';
 import { FC } from 'react';
 
@@ -41,7 +41,6 @@ export const TokenSelection: FC<Props> = ({ url, base, quote }) => {
     const data: ModalTokenListData = {
       onClick,
       excludedTokens: [isBase ? (quote?.address ?? '') : (base?.address ?? '')],
-      isBaseToken: isBase,
     };
     openModal('tokenLists', data);
   };

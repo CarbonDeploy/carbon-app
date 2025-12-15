@@ -1,5 +1,5 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { buildTokenList, fetchTokenLists, Token } from 'libs/tokens';
+import { buildTokenList, fetchTokenLists, Token, TokenList } from 'libs/tokens';
 import { QueryKey } from 'libs/queries/queryKey';
 import { ONE_HOUR_IN_MS } from 'utils/time';
 import { lsService } from 'services/localeStorage';
@@ -16,7 +16,17 @@ export const useExistingTokensQuery = () => {
   return useQuery({
     queryKey: QueryKey.tokens(),
     queryFn: async () => {
-      const tokens = buildTokenList(await fetchTokenLists());
+      const [apiTokens, localList] = await Promise.all([
+        carbonApi.getTokens(),
+        fetchTokenLists(),
+      ]);
+      const apiList: TokenList = {
+        id: 'api',
+        name: 'api',
+        tokens: apiTokens,
+      };
+      const tokens = buildTokenList(localList.concat(apiList));
+
       lsService.setItem('tokenListCache', { tokens, timestamp: Date.now() });
       return tokens;
     },
@@ -39,7 +49,8 @@ export const useMissingTokensQuery = (
   return useQuery({
     queryKey: QueryKey.missingTokens(),
     queryFn: async () => {
-      const previous = lsService.getItem('importedTokens') || [];
+      const previous: Token[] = [];
+      const imported = lsService.getItem('importedTokens') || [];
       const existing = new Set();
 
       // Tokens from app files
@@ -48,21 +59,18 @@ export const useMissingTokensQuery = (
       }
 
       // Manually imported tokens from local storage
-      for (const token of previous || []) {
-        existing.add(token.address.toLowerCase());
+      for (const token of imported || []) {
+        // If we add a new token in local list which is already in imported LS, ignore it
+        if (!existing.has(token.address.toLowerCase())) {
+          existing.add(token.address.toLowerCase());
+          previous.push(token);
+        }
       }
 
       const missing = new Set<string>();
       const fillMissing = (address: string) => {
         if (!existing.has(address.toLowerCase())) missing.add(address);
       };
-
-      // External API: all tokens, even from deleted strategies
-      const meta = await carbonApi.getActivityMeta({ actions: 'create,edit' });
-      for (const [base, quote] of meta.pairs) {
-        fillMissing(base);
-        fillMissing(quote);
-      }
 
       // SDK: all tokens from current strategies (require for Tenderly)
       for (const [base, quote] of pairs.data || []) {
@@ -71,11 +79,8 @@ export const useMissingTokensQuery = (
       }
 
       // Config: Mainly for testnet on new chains
-      for (const base of config.popularTokens.base) {
+      for (const base of config.popularTokens) {
         fillMissing(base);
-      }
-      for (const quote of config.popularTokens.quote) {
-        fillMissing(quote);
       }
 
       const missingTokens = await getMissingTokens(missing, (address) =>
@@ -102,12 +107,17 @@ export const getMissingTokens = async (
     getTokens.push(getToken(address));
   }
   const tokens: Token[] = [];
-  const responses = await Promise.allSettled(getTokens);
-  for (const res of responses) {
-    if (res.status === 'fulfilled') {
-      tokens.push(res.value);
-    } else {
-      console.error(res.reason);
+  const step = 100;
+  for (let i = 0; i < getTokens.length; i += step) {
+    const max = Math.min(i + step, getTokens.length);
+    const batch = getTokens.slice(i, max);
+    const responses = await Promise.allSettled(batch);
+    for (const res of responses) {
+      if (res.status === 'fulfilled') {
+        tokens.push(res.value);
+      } else {
+        console.error(res.reason);
+      }
     }
   }
   return tokens;

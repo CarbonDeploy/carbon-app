@@ -9,7 +9,7 @@ import { useModal } from 'hooks/useModal';
 import { useNavigate, useSearch } from 'libs/routing';
 import { DropdownMenu, MenuButtonProps } from 'components/common/dropdownMenu';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { ReactComponent as IconGear } from 'assets/icons/gear.svg';
+import IconGear from 'assets/icons/gear.svg?react';
 import {
   StrategyEditOptionId,
   getTooltipTextByStrategyEditOptionsId,
@@ -341,11 +341,7 @@ const ManageItem: FC<{
 
   if (tooltipText) {
     return (
-      <Tooltip
-        disabled={belowBreakpoint('md')}
-        element={tooltipText}
-        interactive={false}
-      >
+      <Tooltip disabled={belowBreakpoint('md')} element={tooltipText}>
         <li role="none">
           <Content />
         </li>

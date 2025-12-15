@@ -1,23 +1,21 @@
 import { Link } from '@tanstack/react-router';
-
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
+import IconTooltip from 'assets/icons/tooltip.svg?react';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useMemo } from 'react';
-import { cn, prettifyNumber } from 'utils/helpers';
+import { cn, getUsdPrice, prettifyNumber } from 'utils/helpers';
 import style from './PortfolioHeader.module.css';
 
 export const PortfolioHeader = () => {
   const { strategies = [] } = useStrategyCtx();
-  const { selectedFiatCurrency: currentCurrency } = useFiatCurrency();
 
   const netWorth = useMemo(() => {
     const total = strategies.reduce((acc, strategy) => {
       return acc.add(strategy.fiatBudget.total);
     }, new SafeDecimal(0));
-    return prettifyNumber(total, { currentCurrency });
-  }, [strategies, currentCurrency]);
+    return getUsdPrice(total);
+  }, [strategies]);
 
   const totalTrade = useMemo(() => {
     const total = strategies.reduce((acc, strategy) => {
@@ -46,10 +44,9 @@ export const PortfolioHeader = () => {
               className="flex items-center gap-4 text-white/60"
             >
               <span>Net Worth</span>
-              <Tooltip
-                iconClassName="size-14"
-                element="The sum of the budgets from all strategies in the portfolio."
-              />
+              <Tooltip element="The sum of the budgets from all strategies in the portfolio.">
+                <IconTooltip className="size-14" />
+              </Tooltip>
             </p>
             <p role="cell" className="md:text-[32px]">
               {netWorth}
