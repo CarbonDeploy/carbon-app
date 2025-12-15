@@ -33,9 +33,16 @@ export const useGetEnrichedStrategies = (
       tradeCount24h.set(item.id, item.strategyTrades_24h);
     }
 
-    return strategies.map((strategy) => {
-      const basePrice = new SafeDecimal(prices[strategy.base.address] ?? 0);
-      const quotePrice = new SafeDecimal(prices[strategy.quote.address] ?? 0);
+    return strategies.map((strategy, index) => {
+      const baseAddress = strategy.base.address.toLowerCase();
+      const quoteAddress = strategy.quote.address.toLowerCase();
+      const basePriceValue =
+        prices[baseAddress] ?? prices[strategy.base.address] ?? 0;
+      const quotePriceValue =
+        prices[quoteAddress] ?? prices[strategy.quote.address] ?? 0;
+
+      const basePrice = new SafeDecimal(basePriceValue);
+      const quotePrice = new SafeDecimal(quotePriceValue);
       const base = basePrice.times(strategy.sell.budget);
       const quote = quotePrice.times(strategy.buy.budget);
       const total = base.plus(quote);

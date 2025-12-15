@@ -150,7 +150,7 @@ export const ExplorerHeader = () => {
             value={trending.data?.totalTradeCount}
             format={formatInt}
             loadingWidth="10ch"
-            initDelta={60}
+            initDelta={0}
           />
           <div className="flex justify-between gap-16">
             <div className="grid gap-8">
