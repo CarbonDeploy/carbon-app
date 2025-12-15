@@ -7,6 +7,8 @@
     "@bancor/carbon-sdk": "0.0.127-DEV",
     "@bigmi/react": "^0.6.1",
     "@cloudflare/workers-types": "4.20230717.0",
+    "@floating-ui/core": "^1.7.3",
+    "@floating-ui/dom": "^1.7.4",
     "@floating-ui/react": "0.27.16",
     "@oddbird/popover-polyfill": "0.6.1",
     "@openocean.finance/widget": "^1.0.43",
@@ -30,7 +32,7 @@
     "@ton/core": "^0.61.0",
     "@ton/ton": "^15.3.1",
     "@tonappchain/sdk": "^0.6.5-mainnet-alpha",
-    "@tonconnect/ui-react": "2.2.0",
+    "@tonconnect/ui-react": "2.3.1",
     "@typechain/ethers-v6": "0.5.1",
     "@types/d3": "7.4.3",
     "@types/node": "20.0.0",
@@ -72,6 +74,7 @@
     "react": "19.0.0",
     "react-day-picker": "9.4.2",
     "react-dom": "19.0.0",
+    "rollup": "^4.53.4",
     "tailwind-merge": "3.3.1",
     "tailwindcss": "4.1.11",
     "typechain": "8.3.2",
@@ -130,5 +133,8 @@
       "last 1 safari version"
     ]
   },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
+  "optionalDependencies": {
+    "@rollup/rollup-darwin-x64": "^4.53.4"
+  }
 }
