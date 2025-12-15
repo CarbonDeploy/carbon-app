@@ -54,7 +54,7 @@ export const PairLogoName = memo(_PairLogoName, (a, b) => {
 
 export const PairName: FC<TradePair> = ({ baseToken, quoteToken }) => (
   <>
-    <span className="font-medium inline-flex items-center gap-4">
+    <span className="font-medium whitespace-nowrap items-center gap-4">
       {baseToken.isSuspicious && <SuspiciousToken />}
       <Tooltip element={<TokenTooltip token={baseToken} />}>
         <span>{baseToken.symbol}</span>

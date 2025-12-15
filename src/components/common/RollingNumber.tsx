@@ -20,7 +20,7 @@ export const RollingNumber = ({
   const ref = useRef<HTMLParagraphElement>(null);
   const anims = useRef<Promise<Animation>[]>(null);
   const lastTrades = useRef(0);
-  const initDelta = 60;
+  const initDelta = 0;
 
   useEffect(() => {
     if (typeof value !== 'number' || !value) return;
@@ -39,8 +39,8 @@ export const RollingNumber = ({
           const anim = letters[i]?.animate(
             [{ transform: `translateY(-${v}0%)` }],
             {
-              duration: 1000,
-              delay: i * 100,
+              duration: 1250,
+              delay: i * 200,
               fill: 'forwards',
               easing: 'cubic-bezier(1,-0.54,.65,1.46)',
             },

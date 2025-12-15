@@ -93,7 +93,10 @@ export const StrategyBlockBuySell: FC<{
           </span>
         }
       >
-        <p className="text-14" data-testid={`${testIdPrefix}-budget`}>
+        <p
+          className="text-14 whitespace-nowrap"
+          data-testid={`${testIdPrefix}-budget`}
+        >
           {prettifiedBudget} {otherToken.symbol}
         </p>
       </Tooltip>

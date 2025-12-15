@@ -1,28 +1,27 @@
 import { FC } from 'react';
-import { AnyStrategyWithFiat } from 'components/strategies/common/types';
 import { cn, prettifyNumber } from 'utils/helpers';
-import { Link } from 'libs/routing';
-import { ReactComponent as IconStar } from 'assets/icons/star-fill.svg';
 import { TokensOverlap } from 'components/common/tokensOverlap';
-import { PairName } from 'components/common/DisplayPair';
-import { StrategyStatusTag } from 'components/strategies/overview/strategyBlock/StrategyBlockHeader';
-import { StrategyWithROIData, formatROI, getRoiColor } from './utils';
+import { Link } from 'libs/routing';
+import {
+  PairWithRankData,
+  formatROIRange,
+  formatAPR,
+  getRoiColor,
+} from './utils';
+import { RankBadge } from './RankBadge';
+import { useToken } from 'hooks/useTokens';
 
 interface LeaderboardListProps {
-  strategiesWithROI: StrategyWithROIData[];
+  pairs: PairWithRankData[];
 }
 
-export const LeaderboardList: FC<LeaderboardListProps> = ({
-  strategiesWithROI,
-}) => {
+export const LeaderboardList: FC<LeaderboardListProps> = ({ pairs }) => {
   return (
-    <div className="grid gap-12">
-      {strategiesWithROI.map((item) => (
+    <div className="grid gap-16">
+      {pairs.map((item) => (
         <LeaderboardCard
-          key={item.strategy.id}
-          strategy={item.strategy}
-          roi={item.roi}
-          rank={item.rank}
+          key={`${item.pair.baseTokenAddress}-${item.pair.quoteTokenAddress}`}
+          pairData={item}
         />
       ))}
     </div>
@@ -30,80 +29,100 @@ export const LeaderboardList: FC<LeaderboardListProps> = ({
 };
 
 interface LeaderboardCardProps {
-  strategy: AnyStrategyWithFiat;
-  roi: number;
-  rank: number;
+  pairData: PairWithRankData;
 }
 
-const LeaderboardCard: FC<LeaderboardCardProps> = ({ strategy, roi, rank }) => {
-  const isTopThree = rank <= 3;
-  const { base, quote, status, tradeCount } = strategy;
+const LeaderboardCard: FC<LeaderboardCardProps> = ({ pairData }) => {
+  const { pair, rank } = pairData;
+
+  const { token: baseToken, isPending: baseLoading } = useToken(
+    pair.baseTokenAddress,
+  );
+  const { token: quoteToken, isPending: quoteLoading } = useToken(
+    pair.quoteTokenAddress,
+  );
+
+  if (baseLoading || quoteLoading || !baseToken || !quoteToken) {
+    return null;
+  }
 
   return (
-    <Link
-      to="/strategy/$id"
-      params={{ id: strategy.id }}
-      className="surface hover:bg-main-700 rounded-16 p-16 transition-colors"
-    >
-      <div className="flex items-start justify-between gap-12 mb-12">
+    <div className="surface rounded-2xl p-16">
+      <div className="flex items-start justify-between gap-12 mb-16">
         <div className="flex items-center gap-12">
-          {isTopThree ? (
-            <div
-              className={cn(
-                'flex size-40 items-center justify-center rounded-full shrink-0',
-                rank === 1 && 'bg-yellow-500/10',
-                rank === 2 && 'bg-gray-400/10',
-                rank === 3 && 'bg-orange-600/10',
-              )}
-            >
-              <IconStar
-                className={cn(
-                  'size-20',
-                  rank === 1 && 'text-yellow-500',
-                  rank === 2 && 'text-gray-400',
-                  rank === 3 && 'text-orange-600',
-                )}
-              />
-            </div>
-          ) : (
-            <div className="bg-main-600 flex size-40 items-center justify-center rounded-full shrink-0">
-              <span className="text-14 text-white/60 font-medium">{rank}</span>
-            </div>
-          )}
+          <RankBadge rank={rank} size="sm" />
 
           <div className="flex flex-col gap-4">
             <span className="text-12 text-white/60">Rank #{rank}</span>
             <div className="flex items-center gap-8">
-              <TokensOverlap size={20} tokens={[base, quote]} />
-              <h3 className="text-16 font-medium">
-                <PairName baseToken={base} quoteToken={quote} />
+              <TokensOverlap size={24} tokens={[baseToken, quoteToken]} />
+              <h3 className="text-16 font-medium text-white">
+                {baseToken.symbol}/{quoteToken.symbol}
               </h3>
             </div>
           </div>
         </div>
 
         <div className="flex flex-col items-end gap-4">
-          <span className="text-12 text-white/60">ROI</span>
-          <span className={cn('text-18 font-bold', getRoiColor(roi))}>
-            {formatROI(roi)}
+          <span className="text-12 text-white/60">ROI Range</span>
+          <span
+            className={cn('text-16 font-bold', getRoiColor(pair.roiRange.max))}
+          >
+            {formatROIRange(pair.roiRange.min, pair.roiRange.max)}
           </span>
         </div>
       </div>
 
-      <div className="flex items-center gap-12 text-12 flex-wrap">
-        <span className="text-white/60">ID: {strategy.idDisplay}</span>
-        <svg width="4" height="4" role="separator">
-          <circle cx="2" cy="2" r="2" fill="currentcolor" />
-        </svg>
-        <StrategyStatusTag status={status} isExplorer={true} />
-        <svg width="4" height="4" role="separator">
-          <circle cx="2" cy="2" r="2" fill="currentcolor" />
-        </svg>
-        <span className="text-white/60">
-          Trades:{' '}
-          {prettifyNumber(tradeCount, { abbreviate: true, decimals: 0 })}
-        </span>
+      <hr className="border-main-700 mb-16" />
+
+      <div className="grid grid-cols-2 gap-x-12 gap-y-16 text-14 mb-16">
+        <div className="flex flex-col gap-4">
+          <span className="text-12 text-white/60">7d APR</span>
+          <span className="text-white/80 font-medium">
+            {formatAPR(pair.apr7d)}
+          </span>
+        </div>
+        <div className="flex flex-col gap-4">
+          <span className="text-12 text-white/60">30d APR</span>
+          <span className="text-white/80 font-medium">
+            {formatAPR(pair.apr30d)}
+          </span>
+        </div>
+        <div className="flex flex-col gap-4">
+          <span className="text-12 text-white/60">Trades</span>
+          <span className="text-white/80 font-medium">
+            {prettifyNumber(pair.totalTrades, {
+              abbreviate: true,
+              decimals: 0,
+            })}
+          </span>
+        </div>
+        <div className="flex flex-col gap-4">
+          <span className="text-12 text-white/60">TVL</span>
+          <span className="text-white/80 font-medium">
+            ${prettifyNumber(pair.tvl, { abbreviate: true, decimals: 2 })}
+          </span>
+        </div>
+        <div className="flex flex-col gap-4">
+          <span className="text-12 text-white/60">Strategies</span>
+          <span className="text-white/80 font-medium">
+            {pair.strategyCount}
+          </span>
+        </div>
       </div>
-    </Link>
+
+      <Link
+        className="btn-primary w-full"
+        to="/trade/disposable"
+        search={{
+          base: pair.baseTokenAddress,
+          quote: pair.quoteTokenAddress,
+          direction: 'sell',
+          settings: 'limit',
+        }}
+      >
+        Create Position
+      </Link>
+    </div>
   );
 };
