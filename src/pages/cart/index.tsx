@@ -6,12 +6,7 @@ import { useWagmi } from 'libs/wagmi';
 import { cn } from 'utils/helpers';
 import { FormEvent, useMemo, useState } from 'react';
 import { ApprovalToken, useApproval } from 'hooks/useApproval';
-import {
-  QueryKey,
-  toTransactionRequest,
-  useGetTokenBalances,
-  useQueryClient,
-} from 'libs/queries';
+import { QueryKey, useGetTokenBalances, useQueryClient } from 'libs/queries';
 import { SafeDecimal } from 'libs/safedecimal';
 import { Token } from 'libs/tokens';
 import { Warning } from 'components/common/WarningMessageWithIcon';
@@ -23,6 +18,7 @@ import { AnyCartStrategy } from 'components/strategies/common/types';
 import style from 'components/strategies/common/form.module.css';
 import config from 'config';
 import { isGradientStrategy } from 'components/strategies/common/utils';
+import { useRestrictedCountry } from 'hooks/useRestrictedCountry';
 
 const batcher = config.addresses.carbon.batcher;
 const getApproveTokens = (strategies: AnyCartStrategy[]) => {
@@ -67,6 +63,7 @@ export const CartPage = () => {
   const { user, sendTransaction } = useWagmi();
   const { openModal } = useModal();
   const { dispatchNotification } = useNotifications();
+  const { checkRestriction } = useRestrictedCountry();
   const cache = useQueryClient();
 
   const nav = useNavigate({ from: '/cart' });
@@ -80,7 +77,7 @@ export const CartPage = () => {
   const approval = useApproval(approvalTokens);
   const funds = useHasInsufficientFunds(approvalTokens);
 
-  const submit = (e: FormEvent<HTMLFormElement>) => {
+  const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     if (form.querySelector('.error-message')) return;
@@ -89,6 +86,9 @@ export const CartPage = () => {
       const approve = form.querySelector<HTMLInputElement>('#approve-warnings');
       if (approve && !approve.checked) return;
     }
+
+    const checked = await checkRestriction();
+    if (!checked) return;
 
     const create = async () => {
       setConfirmation(true);
@@ -136,7 +136,7 @@ export const CartPage = () => {
           })),
         };
 
-        const tx = await sendTransaction(toTransactionRequest(unsignedTx));
+        const tx = await sendTransaction(unsignedTx);
         setConfirmation(false);
         setProcessing(true);
         dispatchNotification('createBatchStrategy', { txHash: tx.hash });

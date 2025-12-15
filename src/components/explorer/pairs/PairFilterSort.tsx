@@ -1,7 +1,7 @@
-import { Dispatch, FC, FormEvent, SetStateAction, useId } from 'react';
+import { FC, FormEvent, useId } from 'react';
 import { DropdownMenu } from 'components/common/dropdownMenu';
-import { ReactComponent as IconChevron } from 'assets/icons/chevron.svg';
-import { ReactComponent as IconCheck } from 'assets/icons/check.svg';
+import IconChevron from 'assets/icons/chevron.svg?react';
+import IconCheck from 'assets/icons/check.svg?react';
 import { cn } from 'utils/helpers';
 import { pairFilter, PairFilter, pairSort, PairSort } from './utils';
 
@@ -13,7 +13,7 @@ const sortItems = Object.entries(pairSort)
 
 interface SortProps {
   sort: PairSort;
-  setSort: Dispatch<SetStateAction<PairSort>>;
+  setSort: (sort: PairSort) => void;
   className?: string;
 }
 
@@ -65,7 +65,7 @@ export const PairSortDropdown: FC<SortProps> = (props) => {
 
 interface FilterProps {
   filter: PairFilter;
-  setFilter: Dispatch<SetStateAction<PairFilter>>;
+  setFilter: (filter: PairFilter) => void;
   className?: string;
 }
 export const PairFilterDropdown: FC<FilterProps> = (props) => {

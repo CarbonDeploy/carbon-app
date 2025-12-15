@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Link, useRouterState } from 'libs/routing';
-import { ReactComponent as LogoDna } from 'assets/logos/dna_logo.svg';
+import LogoDna from 'assets/logos/dna_logo.svg?react';
 import { getMenuItems } from 'components/core/menu';
 import { useWagmi } from 'libs/wagmi';
 

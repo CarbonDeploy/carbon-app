@@ -5,8 +5,8 @@ import {
   isMinAboveMarket,
 } from 'components/strategies/overlapping/utils';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
+import IconTooltip from 'assets/icons/tooltip.svg?react';
 import { OverlappingSpread } from 'components/strategies/overlapping/OverlappingSpread';
-import { calculateOverlappingPrices } from '@bancor/carbon-sdk/strategy-management';
 import { SafeDecimal } from 'libs/safedecimal';
 import {
   BudgetDescription,
@@ -15,7 +15,6 @@ import {
 import { OverlappingAnchor } from 'components/strategies/overlapping/OverlappingAnchor';
 import { getDeposit, getWithdraw } from './utils';
 import { OverlappingAction } from 'components/strategies/overlapping/OverlappingAction';
-import { formatNumber } from 'utils/helpers';
 import { CreateOverlappingOrder } from '../common/types';
 import { useEditStrategyCtx } from './EditStrategyContext';
 import { useNavigate, useSearch } from '@tanstack/react-router';
@@ -28,25 +27,6 @@ interface Props {
   buy: CreateOverlappingOrder;
   sell: CreateOverlappingOrder;
   spread: string;
-}
-
-export function isEditBelowMarket(
-  min: string,
-  max: string,
-  marketPrice: number | undefined,
-  spread: number,
-) {
-  if (!marketPrice) return false;
-  const prices = calculateOverlappingPrices(
-    formatNumber(min || '0'),
-    formatNumber(max || '0'),
-    marketPrice.toString(),
-    spread.toString(),
-  );
-  return isMaxBelowMarket({
-    max: prices.sellPriceHigh,
-    marginalPrice: prices.sellPriceMarginal,
-  });
 }
 
 type Search = EditOverlappingStrategySearch;
@@ -174,10 +154,9 @@ export const EditOverlappingPrice: FC<Props> = (props) => {
                   ({quote?.symbol} per 1 {base?.symbol})
                 </span>
               </h2>
-              <Tooltip
-                element="Indicate the strategy exact buy and sell prices."
-                iconClassName="size-18 text-white/60"
-              />
+              <Tooltip element="Indicate the strategy exact buy and sell prices.">
+                <IconTooltip className="size-18 text-white/60" />
+              </Tooltip>
             </header>
             <OverlappingPriceRange
               base={base}

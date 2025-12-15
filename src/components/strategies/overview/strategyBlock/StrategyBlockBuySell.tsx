@@ -3,8 +3,9 @@ import { CartStrategy, Order } from 'components/strategies/common/types';
 import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { LogoImager } from 'components/common/imager/Imager';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
-import { ReactComponent as WarningIcon } from 'assets/icons/warning.svg';
-import { cn, getFiatDisplayValue, prettifyNumber } from 'utils/helpers';
+import IconTooltip from 'assets/icons/tooltip.svg?react';
+import WarningIcon from 'assets/icons/warning.svg?react';
+import { cn, getUsdPrice, prettifyNumber } from 'utils/helpers';
 
 export const StrategyBlockBuySell: FC<{
   strategy: CartStrategy<Order>;
@@ -16,17 +17,16 @@ export const StrategyBlockBuySell: FC<{
   const order = isBuy ? strategy.buy : strategy.sell;
   const testIdPrefix = `${isBuy ? 'buy' : 'sell'}`;
   const otherTokenFiat = useFiatCurrency(otherToken);
-  const currency = otherTokenFiat.selectedFiatCurrency;
   const prettifiedBudget = prettifyNumber(order.budget, { abbreviate: true });
   const hasFiatValue = otherTokenFiat.hasFiatValue();
   const fiatBudget = isBuy
     ? strategy.fiatBudget.quote
     : strategy.fiatBudget.base;
-  const fiatBudgetValue = getFiatDisplayValue(fiatBudget, currency);
+  const fiatBudgetValue = getUsdPrice(fiatBudget);
 
   const buyTooltip = `${otherToken.symbol} tokens available to buy ${token.symbol}.`;
   const sellTooltip = `${otherToken.symbol} tokens available for sale.`;
-  const noCurrencyTooltip = `There is no ${currency} value for this token.`;
+  const noCurrencyTooltip = `There is no USD value for this token.`;
 
   return (
     <article className={cn('flex flex-col gap-4 p-16', className)}>
@@ -34,10 +34,9 @@ export const StrategyBlockBuySell: FC<{
         <header className="flex items-center gap-4">
           <h4 className="text-12 text-buy">Buy {token.symbol}</h4>
           {hasFiatValue && (
-            <Tooltip
-              element={buyTooltip}
-              iconClassName="size-10 text-white/60"
-            />
+            <Tooltip element={buyTooltip}>
+              <IconTooltip className="size-10 text-white/60" />
+            </Tooltip>
           )}
           {!hasFiatValue && (
             <Tooltip
@@ -59,10 +58,9 @@ export const StrategyBlockBuySell: FC<{
         <header className="flex items-center gap-4">
           <h4 className="text-12 text-sell">Sell {otherToken.symbol}</h4>
           {hasFiatValue && (
-            <Tooltip
-              element={sellTooltip}
-              iconClassName="size-10 text-white/60"
-            />
+            <Tooltip element={sellTooltip}>
+              <IconTooltip className="size-10 text-white/60" />
+            </Tooltip>
           )}
           {!hasFiatValue && (
             <Tooltip
@@ -74,9 +72,7 @@ export const StrategyBlockBuySell: FC<{
                 </p>
               }
             >
-              <span>
-                <WarningIcon className="text-warning size-10" />
-              </span>
+              <WarningIcon className="text-warning size-10" />
             </Tooltip>
           )}
         </header>
@@ -93,7 +89,10 @@ export const StrategyBlockBuySell: FC<{
           </span>
         }
       >
-        <p className="text-14" data-testid={`${testIdPrefix}-budget`}>
+        <p
+          className="text-14 whitespace-nowrap"
+          data-testid={`${testIdPrefix}-budget`}
+        >
           {prettifiedBudget} {otherToken.symbol}
         </p>
       </Tooltip>

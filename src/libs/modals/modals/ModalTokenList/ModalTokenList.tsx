@@ -1,5 +1,4 @@
-import { ModalFC } from 'libs/modals/modals.types';
-import { Token } from 'libs/tokens';
+import { ModalProps } from 'libs/modals/modals.types';
 import { useModalTokenList } from 'libs/modals/modals/ModalTokenList/useModalTokenList';
 import { ModalTokenListImport } from 'libs/modals/modals/ModalTokenList/ModalTokenListImport';
 import { ModalTokenListNotFound } from 'libs/modals/modals/ModalTokenList/ModalTokenListNotFound';
@@ -8,54 +7,66 @@ import { ModalTokenListLoading } from 'libs/modals/modals/ModalTokenList/ModalTo
 import { ModalTokenListError } from 'libs/modals/modals/ModalTokenList/ModalTokenListError';
 import { ModalTokenImportNotification } from 'libs/modals/modals/ModalTokenList/ModalTokenImportNotification';
 import { SearchInput } from 'components/common/searchInput';
-import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
-import { useBreakpoints } from 'hooks/useBreakpoints';
-import { KeyboardEvent } from 'react';
+import { Modal, ModalHeader } from 'libs/modals/Modal';
+import { KeyboardEvent, useCallback } from 'react';
+import { ModalTokenListData } from './types';
+import { Token } from 'libs/tokens';
+import { useTokens } from 'hooks/useTokens';
+import { useModal } from 'hooks/useModal';
 
-export type ModalTokenListData = {
-  onClick: (token: Token) => void;
-  excludedTokens?: string[];
-  includedTokens?: string[];
-  isBaseToken?: boolean;
-};
+export default function ModalTokenList({
+  id,
+  data,
+}: ModalProps<ModalTokenListData>) {
+  const { closeModal } = useModal();
+  const { isError, isPending } = useTokens();
 
-export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
-  const { belowBreakpoint } = useBreakpoints();
+  const { search, setSearch, showImportToken, all, duplicateSymbols } =
+    useModalTokenList(data.excludedTokens);
 
-  const {
-    search,
-    setSearch,
-    showImportToken,
-    showNoResults,
-    filteredTokens,
-    onSelect,
-    isError,
-    isPending,
-    addFavoriteToken,
-    removeFavoriteToken,
-    favoriteTokens,
-    popularTokens,
-    duplicateSymbols,
-  } = useModalTokenList({ id, data });
+  const select = useCallback(
+    (token: Token) => {
+      data.onClick(token);
+      closeModal(id);
+    },
+    [data, closeModal, id],
+  );
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Enter' && !!filteredTokens.length) {
-      onSelect(filteredTokens[0]);
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      const selected = '.token-select[aria-selected]';
+      const getSelected = () => document.querySelector<HTMLElement>(selected);
+      const getFirst = () =>
+        document.querySelector<HTMLElement>('.token-select');
+      const el = getSelected() || getFirst();
+      el?.click();
+    } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      const getAll = () =>
+        document.querySelectorAll<HTMLElement>('.token-select');
+      const all = Array.from(getAll());
+      const current = all.findIndex((item) => item.ariaSelected);
+      // Always fallback on first because list is too long
+      const next = e.key === 'ArrowDown' ? current + 1 : current - 1;
+      all[current]?.removeAttribute('aria-selected');
+      all[next]?.setAttribute('aria-selected', 'true');
+      all[next]?.scrollIntoView({ block: 'center' });
     }
-  };
+  }, []);
 
   return (
-    <ModalOrMobileSheet id={id} title="Select Token" className="md:max-w-500">
+    <Modal id={id} className="grid content-start gap-16 md:w-500 h-[70vh]">
+      <ModalHeader id={id}>
+        <h2 id="modal-title">Select Token</h2>
+      </ModalHeader>
       <SearchInput
         aria-labelledby="modal-title"
-        aria-description="search by token symbol"
-        autoFocus={!belowBreakpoint('md')}
         value={search}
         setValue={setSearch}
         className="rounded-md"
         onKeyDown={handleKeyDown}
       />
-      {!showNoResults && !showImportToken && <ModalTokenImportNotification />}
+      {!!all.size && !showImportToken && <ModalTokenImportNotification />}
 
       {isError ? (
         <ModalTokenListError />
@@ -63,22 +74,16 @@ export const ModalTokenList: ModalFC<ModalTokenListData> = ({ id, data }) => {
         <ModalTokenListLoading />
       ) : showImportToken ? (
         <ModalTokenListImport address={search} />
-      ) : showNoResults ? (
+      ) : !all.size ? (
         <ModalTokenListNotFound />
       ) : (
         <ModalTokenListContent
-          tokens={{
-            all: filteredTokens,
-            favorites: favoriteTokens,
-            popular: popularTokens,
-          }}
+          all={all}
           duplicateSymbols={duplicateSymbols}
-          onSelect={onSelect}
+          select={select}
           search={search}
-          onAddFavorite={addFavoriteToken}
-          onRemoveFavorite={removeFavoriteToken}
         />
       )}
-    </ModalOrMobileSheet>
+    </Modal>
   );
-};
+}

@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useModal } from 'hooks/useModal';
-import { ReactComponent as IconBell } from 'assets/icons/bell.svg';
+import IconBell from 'assets/icons/bell.svg?react';
 import { useNotifications } from 'hooks/useNotifications';
 
 export const MainMenuRightNotifications: FC = () => {
@@ -10,7 +10,7 @@ export const MainMenuRightNotifications: FC = () => {
   return (
     <button
       className="btn-on-background relative p-0"
-      onClick={() => openModal('notifications', undefined)}
+      onClick={() => openModal('notifications')}
     >
       <span className="grid size-40 place-items-center">
         {hasPendingTx && (

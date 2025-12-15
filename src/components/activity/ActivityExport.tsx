@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { SafeDecimal } from 'libs/safedecimal';
 import { fromUnixUTC } from 'components/simulator/utils';
 import { useDialog } from 'hooks/useDialog';
-import { ReactComponent as IconClose } from 'assets/icons/X.svg';
+import IconClose from 'assets/icons/X.svg?react';
 import styles from './ActivityExport.module.css';
 
 const getActivityCSV = (activities: Activity[]) => {
@@ -49,7 +49,7 @@ const getActivityCSV = (activities: Activity[]) => {
   const body = activities.map((activity) => {
     const { strategy, changes, blockNumber, txHash } = activity;
     const { base, quote } = strategy;
-    const date = new Date(activity.date).toLocaleDateString();
+    const date = new Date(activity.date).toISOString();
     const min = (order: ActivityOrder) => {
       if ('min' in order) return order.min;
       return SafeDecimal.min(order._sP_, order._eP_).toString();
@@ -151,7 +151,7 @@ export const ActivityExport = () => {
         </svg>
       </button>
       {!!size && size > limit && (
-        <dialog className="modal" ref={ref} onClick={lightDismiss}>
+        <dialog className="modal center" ref={ref} onClick={lightDismiss}>
           <form method="dialog" className="text-14 grid gap-16">
             <header className="flex justify-between">
               <h2 className="text-18">Export Limit</h2>

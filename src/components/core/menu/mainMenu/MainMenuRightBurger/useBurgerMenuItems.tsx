@@ -1,6 +1,6 @@
 import { ReactElement, useMemo, useState } from 'react';
 import { externalLinks, NewTabLink, Link } from 'libs/routing';
-import { ReactComponent as IconX } from 'assets/logos/x.svg';
+import IconX from 'assets/logos/x.svg?react';
 import { ForwardArrow } from 'components/common/forwardArrow';
 import config from 'config';
 
@@ -10,7 +10,7 @@ export type Menu = ReactElement[];
 
 const iconStyles = 'size-32 md:size-20';
 const menuitemClass =
-  'rounded-sm cursor-pointer text-18 md:text-16 p-10 hover:bg-main-900/40 aria-selected:bg-main-900/60 flex items-center gap-8 first:border-b last:border-t border-main-700';
+  'rounded-sm cursor-pointer text-18 md:text-16 p-10 hover:bg-main-900/40 aria-selected:bg-main-900/60 flex items-center gap-8';
 
 export const useBurgerMenuItems = () => {
   const [currentMenu, setCurrentMenu] = useState<MenuType>('main');
@@ -19,6 +19,16 @@ export const useBurgerMenuItems = () => {
 
     /** Main Menu */
     const mainItems: Menu = [
+      <button
+        key="resources"
+        role="menuitem"
+        onClick={() => setCurrentMenu('resources')}
+        className={menuitemClass}
+      >
+        <span>Resources</span>
+        <ForwardArrow className="ml-auto" />
+      </button>,
+      <hr key="divider" className="border-b border-main-700 w-full" />,
       <NewTabLink
         key="faq"
         role="menuitem"
@@ -60,7 +70,10 @@ export const useBurgerMenuItems = () => {
       );
     }
     mainItems.push(
-      <footer key="footer" className="flex w-full items-center justify-between">
+      <footer
+        key="footer"
+        className="flex w-full items-center justify-between border-t border-main-700"
+      >
         <NewTabLink
           role="menuitem"
           className={menuitemClass}
@@ -87,6 +100,7 @@ export const useBurgerMenuItems = () => {
         </span>
         <span className="font-medium">Resources</span>
       </button>,
+      <hr key="divider" className="border-b border-main-700 w-full" />,
       <NewTabLink
         key="tect"
         role="menuitem"

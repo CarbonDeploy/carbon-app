@@ -10,10 +10,6 @@ import {
 import { defaultModalStore, ModalStore } from 'store/useModalStore';
 import { defaultTokensStore, TokensStore } from 'store/useTokensStore';
 import {
-  defaultFiatCurrencyStore,
-  FiatCurrencyStore,
-} from 'store/useFiatCurrencyStore';
-import {
   defaultOrderBookSettingsStore,
   OrderBookSettingsStore,
 } from 'store/useOrderBookSettingsStore';
@@ -24,8 +20,6 @@ import { defaultToastStore, ToastStore } from 'store/useToasterStore';
 // ********************************** //
 
 export interface StoreContext {
-  isCountryBlocked: boolean | null;
-  setCountryBlocked: (value: boolean | null) => void;
   tokens: TokensStore;
   notifications: NotificationsStore;
   modals: ModalStore;
@@ -35,15 +29,10 @@ export interface StoreContext {
   orderBook: {
     settings: OrderBookSettingsStore;
   };
-  fiatCurrency: FiatCurrencyStore;
-  innerHeight: number;
-  setInnerHeight: (value: number) => void;
   toaster: ToastStore;
 }
 
 export const defaultValue: StoreContext = {
-  isCountryBlocked: null,
-  setCountryBlocked: () => {},
   tokens: defaultTokensStore,
   notifications: defaultNotificationsStore,
   modals: defaultModalStore,
@@ -53,9 +42,6 @@ export const defaultValue: StoreContext = {
   orderBook: {
     settings: defaultOrderBookSettingsStore,
   },
-  fiatCurrency: defaultFiatCurrencyStore,
-  innerHeight: 0,
-  setInnerHeight: () => {},
   toaster: defaultToastStore,
 };
 

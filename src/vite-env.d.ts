@@ -1,6 +1,12 @@
 /// <reference types="vite/client" />
 /// <reference types="@testing-library/jest-dom" />
 
+declare module '*.svg?react' {
+  import type { FC, SVGProps } from 'react';
+  const content: FC<SVGProps<SVGSVGElement>>;
+  export default content;
+}
+
 interface ImportMetaEnv {
   readonly VITE_NETWORK: string;
   readonly VITE_CHAIN_RPC_URL: string;

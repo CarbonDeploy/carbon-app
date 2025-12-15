@@ -1,8 +1,8 @@
 import { Link, useMatchRoute, useRouterState } from 'libs/routing';
-import { ReactComponent as IconOverview } from 'assets/icons/overview.svg';
-import { ReactComponent as IconPieChart } from 'assets/icons/piechart.svg';
-import { ReactComponent as IconActivity } from 'assets/icons/activity.svg';
-import { ReactComponent as IconPairs } from 'assets/icons/pairs.svg';
+import IconOverview from 'assets/icons/overview.svg?react';
+import IconPieChart from 'assets/icons/piechart.svg?react';
+import IconActivity from 'assets/icons/activity.svg?react';
+import IconPairs from 'assets/icons/pairs.svg?react';
 import { ReactNode } from 'react';
 
 export interface ExplorerTab {
@@ -66,7 +66,7 @@ export const ExplorerTabs = ({ url }: Props) => {
           <Link
             from={url}
             to={href}
-            search={(s) => s}
+            search={(s) => ({ search: s.search })}
             key={href}
             className="grow sm:grow-0 px-8 py-4 font-title font-normal text-white/60 flex gap-8 items-center justify-center sm:px-16 sm:py-8 aria-page:tab-focus tab-anchor"
             resetScroll={false}

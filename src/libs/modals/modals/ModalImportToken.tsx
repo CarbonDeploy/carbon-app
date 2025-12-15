@@ -1,23 +1,23 @@
-import { ModalFC } from 'libs/modals/modals.types';
+import { ModalProps } from 'libs/modals/modals.types';
 import { useGetTokenData } from 'libs/queries/chain/token';
 import { useTokens } from 'hooks/useTokens';
 import { useModal } from 'hooks/useModal';
 import { cn, shortenString } from 'utils/helpers';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import { ReactComponent as IconWarning } from 'assets/icons/warning.svg';
-import { ReactComponent as IconLink } from 'assets/icons/link.svg';
+import IconWarning from 'assets/icons/warning.svg?react';
+import IconLink from 'assets/icons/link.svg?react';
 import { getExplorerLink } from 'utils/blockExplorer';
 import { NewTabLink } from 'libs/routing';
-import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
+import { Modal, ModalHeader } from 'libs/modals/Modal';
 
-export type ModalImportTokenData = {
+interface ModalImportTokenData {
   address: string;
-};
+}
 
-export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
+export default function ModalImportToken({
   id,
   data: { address },
-}) => {
+}: ModalProps<ModalImportTokenData>) {
   const { closeModal } = useModal();
   const { data, isPending, isError } = useGetTokenData(address);
   const { importTokens } = useTokens();
@@ -28,10 +28,13 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
     closeModal(id);
   };
 
-  const blockClasses = 'my-20 h-80 rounded-md';
+  const blockClasses = 'py-16 min-h-56 rounded-md';
 
   return (
-    <ModalOrMobileSheet id={id} title="Import Token">
+    <Modal id={id} className="grid gap-16">
+      <ModalHeader id={id}>
+        <h2>Import Token</h2>
+      </ModalHeader>
       <div className="mt-40">
         <IconTitleText
           variant="warning"
@@ -55,7 +58,7 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
         </div>
       )}
       {data && (
-        <div className={cn(blockClasses, 'bg-main-900 p-16')}>
+        <div className={cn(blockClasses, 'bg-main-900 px-16')}>
           <div className="flex items-center justify-between">
             <div className="font-medium">{data.symbol}</div>
             <NewTabLink
@@ -82,6 +85,6 @@ export const ModalImportToken: ModalFC<ModalImportTokenData> = ({
       <button className="btn-on-surface" onClick={() => closeModal(id)}>
         Cancel
       </button>
-    </ModalOrMobileSheet>
+    </Modal>
   );
-};
+}

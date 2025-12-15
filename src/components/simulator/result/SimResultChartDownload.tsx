@@ -1,4 +1,4 @@
-import { ReactComponent as IconDownload } from 'assets/icons/download.svg';
+import IconDownload from 'assets/icons/download.svg?react';
 import { SimulatorData } from 'libs/queries';
 import { CsvDataService } from 'libs/csv';
 import { Tooltip } from 'components/common/tooltip/Tooltip';
@@ -30,11 +30,7 @@ export const SimResultChartDownload = ({
   simulationType,
 }: Props) => {
   return (
-    <Tooltip
-      damping={20}
-      stiffness={200}
-      element="Download a csv file with full breakdown of the simulation data"
-    >
+    <Tooltip element="Download a csv file with full breakdown of the simulation data">
       <button
         className="grid size-40 place-items-center btn-on-surface rounded-full p-0"
         onClick={() => {

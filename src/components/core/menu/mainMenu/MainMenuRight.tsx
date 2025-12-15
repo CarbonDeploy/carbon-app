@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, lazy, useEffect, useState } from 'react';
 import { useBreakpoints } from 'hooks/useBreakpoints';
 import { MainMenuRightWallet } from 'components/core/menu/mainMenu/MainMenuRightWallet';
 import { MainMenuRightNotifications } from 'components/core/menu/mainMenu/MainMenuRightNotifications';
@@ -8,9 +8,10 @@ import { networks } from 'config';
 import { MainMenuCart } from './MainMenuCart';
 import { lsService } from 'services/localeStorage';
 import { Link } from '@tanstack/react-router';
-import { MainMenuRightWalkthrough } from './MainMenuRightWalkthrough';
-import { TonConnectBtn } from 'libs/ton/TonConnect';
+import { MainMenuRightReward } from './MainMenuRightRewards';
 import config from 'config';
+
+const TonConnectBtn = lazy(() => import('libs/ton/TonConnectBtn'));
 
 const TenderlyForkAlert = () => {
   const [isDebugMode, setIsDebugMode] = useState(false);
@@ -46,7 +47,7 @@ export const MainMenuRight: FC = () => {
   return (
     <div className="flex items-center gap-8 sm:gap-16">
       <TenderlyForkAlert />
-      <MainMenuRightWalkthrough />
+      <MainMenuRightReward />
       {config.ui.showCart && <MainMenuCart />}
       <MainMenuRightNotifications />
       {config.network.name !== 'TON' && (
