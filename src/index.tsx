@@ -1,22 +1,24 @@
 import 'global-shim';
-import React, { ReactNode } from 'react';
+import React, { lazy, ReactNode } from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from 'reportWebVitals';
 import { StoreProvider } from 'store';
 import { WagmiReactWrapper } from 'libs/wagmi';
-import { LazyMotion } from 'libs/motion';
 import { QueryProvider } from 'libs/queries';
 import { RouterProvider, router } from 'libs/routing';
-import { TonProvider } from 'libs/ton/TonProvider';
 import config from 'config';
 import 'init-sentry';
 import 'fonts.css';
 import 'index.css';
 import { SDKProvider } from 'libs/sdk/provider';
+import { init as initTelegramSDK } from '@tma.js/sdk';
+import TelegramAnalytics from '@telegram-apps/analytics';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
+
+const TonProvider = lazy(() => import('libs/ton/TonProvider'));
 
 const WalletProvider = ({ children }: { children: ReactNode }) => {
   if (config.network.name === 'TON') {
@@ -26,15 +28,25 @@ const WalletProvider = ({ children }: { children: ReactNode }) => {
   }
 };
 
+if (config.network.name === 'TON') {
+  try {
+    initTelegramSDK();
+    TelegramAnalytics.init({
+      token: import.meta.env.VITE_TON_ANALYTICS_TOKEN,
+      appName: 'CarbonDefiAppBot',
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 root.render(
   <React.StrictMode>
     <QueryProvider>
       <SDKProvider>
         <StoreProvider>
           <WalletProvider>
-            <LazyMotion>
-              <RouterProvider router={router} />
-            </LazyMotion>
+            <RouterProvider router={router} />
           </WalletProvider>
         </StoreProvider>
       </SDKProvider>

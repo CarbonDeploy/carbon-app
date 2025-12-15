@@ -1,23 +1,23 @@
 import { useModal } from 'hooks/useModal';
-import { ModalOrMobileSheet } from '../../ModalOrMobileSheet';
-import { ModalFC } from '../../modals.types';
+import { Modal, ModalHeader } from '../../Modal';
+import { ModalProps } from '../../modals.types';
 import { Link } from 'libs/routing';
 import { Strategy } from 'components/strategies/common/types';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import { ReactComponent as IconWallet } from 'assets/icons/wallet.svg';
+import IconWallet from 'assets/icons/wallet.svg?react';
 import {
   getEditBudgetPage,
   getEditPricesPage,
 } from 'components/strategies/edit/utils';
 
-export interface ModalConfirmWithdrawData {
+interface ModalConfirmWithdrawData {
   strategy: Strategy;
 }
 
-export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
+export default function ModalConfirmWithdraw({
   id,
   data,
-}) => {
+}: ModalProps<ModalConfirmWithdrawData>) {
   const { closeModal } = useModal();
   const { strategy } = data;
   const editPrices = getEditPricesPage(strategy, 'editPrices');
@@ -26,7 +26,10 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
   const edit = () => closeModal(id);
 
   return (
-    <ModalOrMobileSheet id={id} title="Withdraw Funds" className="md:max-w-450">
+    <Modal id={id} className="grid gap-16">
+      <ModalHeader id={id}>
+        <h2>Withdraw Funds</h2>
+      </ModalHeader>
       <IconTitleText
         icon={<IconWallet className="size-24" />}
         title="Are you sure you would like to withdraw your funds?"
@@ -56,6 +59,6 @@ export const ModalConfirmWithdraw: ModalFC<ModalConfirmWithdrawData> = ({
       >
         Withdraw Funds
       </Link>
-    </ModalOrMobileSheet>
+    </Modal>
   );
-};
+}

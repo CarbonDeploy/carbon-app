@@ -1,8 +1,8 @@
-import { FC, useEffect, useMemo, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnyStrategyWithFiat } from 'components/strategies/common/types';
 import { StrategyBlock } from 'components/strategies/overview/strategyBlock/StrategyBlock';
 import { StrategyBlockCreate } from 'components/strategies/overview/strategyBlock/StrategyBlockCreate';
-import { cn, prettifyNumber } from 'utils/helpers';
+import { cn, getUsdPrice } from 'utils/helpers';
 import { StrategyTable } from './StrategyTable';
 import {
   StrategyLayout,
@@ -16,35 +16,64 @@ import {
 } from './StrategyFilterSort';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { sortStrategyFn, StrategyFilter, StrategySort } from './utils';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { SafeDecimal } from 'libs/safedecimal';
 import { lsService } from 'services/localeStorage';
 import styles from 'components/strategies/overview/StrategyContent.module.css';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 
 const text = {
-  '/explore': {
+  '/explore/strategies': {
     strategies: 'Total Strategies',
     liquidity: 'Total Liquidity',
   },
-  '/portfolio': {
+  '/portfolio/strategies': {
     strategies: 'Your Strategies',
     liquidity: 'Your Liquidity',
   },
 };
 
 interface Props {
-  url: '/explore' | '/portfolio';
+  url: '/explore/strategies' | '/portfolio/strategies';
 }
 
 export const StrategyContent: FC<Props> = ({ url }) => {
-  const { selectedFiatCurrency: currentCurrency } = useFiatCurrency();
-  const [filter, setFilter] = useState<StrategyFilter>({ status: 'all' });
-  const [sort, setSort] = useState<StrategySort>('trades');
+  const { strategies, isPending } = useStrategyCtx();
+  const search = useSearch({ from: url });
+  const nav = useNavigate({ from: url });
+
+  const filter = useMemo(
+    () => ({
+      status: search.filter ?? 'all',
+    }),
+    [search.filter],
+  );
+  const setFilter = useCallback(
+    (filter?: StrategyFilter) => {
+      nav({
+        search: (s) => ({ ...s, filter: filter?.status }),
+        replace: true,
+        resetScroll: false,
+      });
+    },
+    [nav],
+  );
+
+  const sort = search.sort ?? 'trades';
+  const setSort = useCallback(
+    (sort?: StrategySort) => {
+      nav({
+        search: (s) => ({ ...s, sort }),
+        replace: true,
+        resetScroll: false,
+      });
+    },
+    [nav],
+  );
+
   const [layout, setLayout] = useState<StrategyLayout>(
     lsService.getItem('strategyLayout') ?? 'grid',
   );
-  const { strategies, isPending } = useStrategyCtx();
 
   useEffect(() => {
     lsService.setItem('strategyLayout', layout);
@@ -84,8 +113,8 @@ export const StrategyContent: FC<Props> = ({ url }) => {
       (acc, s) => acc.add(s.fiatBudget.total),
       new SafeDecimal(0),
     );
-    return prettifyNumber(amount, { currentCurrency });
-  }, [filtered, currentCurrency]);
+    return getUsdPrice(amount);
+  }, [filtered]);
 
   if (isPending) {
     return (
@@ -121,13 +150,13 @@ export const StrategyContent: FC<Props> = ({ url }) => {
 interface StrategyListProps {
   strategies: AnyStrategyWithFiat[];
   layout: StrategyLayout;
-  url: '/explore' | '/portfolio';
+  url: Props['url'];
 }
 const StrategyList: FC<StrategyListProps> = ({ url, strategies, layout }) => {
   const { belowBreakpoint } = useBreakpoints();
   const [max, setMax] = useState(21);
 
-  const isExplorer = url === '/explore';
+  const isExplorer = url === '/explore/strategies';
 
   if (!strategies?.length) {
     return (

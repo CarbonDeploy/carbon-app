@@ -2,10 +2,9 @@ import { CarbonLogoLoading } from 'components/common/CarbonLogoLoading';
 import { PairContent } from 'components/explorer/pairs/PairContent';
 import { useStrategyCtx } from 'hooks/useStrategies';
 import { SafeDecimal } from 'libs/safedecimal';
-import { FC, useMemo, useState } from 'react';
-import { prettifyNumber } from 'utils/helpers';
+import { FC, useCallback, useMemo } from 'react';
+import { getUsdPrice, prettifyNumber } from 'utils/helpers';
 import { RawPairRow } from 'components/explorer/pairs/types';
-import { useFiatCurrency } from 'hooks/useFiatCurrency';
 import {
   PairFilter,
   PairSort,
@@ -21,41 +20,54 @@ import {
   StrategyTrade,
   useTrending,
 } from 'libs/queries/extApi/tradeCount';
-import { useSearch } from '@tanstack/react-router';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { usePairs } from 'hooks/usePairs';
+import { toSortedPairSlug } from 'utils/pairs';
 
 const text = {
-  '/explore': {
+  '/explore/pairs': {
     pairs: 'Total Pairs',
     liquidity: 'Total Liquidity',
   },
-  '/portfolio': {
+  '/portfolio/pairs': {
     pairs: 'Your Pairs',
     liquidity: 'Your Liquidity',
   },
 };
 
-const toSortedPairSlug = (base: string, quote: string) => {
-  return [base, quote]
-    .map((v) => v.toLowerCase())
-    .sort((a, b) => a.localeCompare(b))
-    .join('_');
-};
-
 type TradeMap = Record<string, { tradeCount: number; tradeCount24h: number }>;
 
 interface Props {
-  url: '/explore' | '/portfolio';
+  url: '/explore/pairs' | '/portfolio/pairs';
 }
 
 export const PairLayout: FC<Props> = ({ url }) => {
   const { getType } = usePairs();
-  const { search } = useSearch({ from: url });
+  const { search, filter = 'all', sort = 'trades' } = useSearch({ from: url });
+  const nav = useNavigate({ from: url });
   const { strategies, isPending } = useStrategyCtx();
-  const { selectedFiatCurrency: currentCurrency } = useFiatCurrency();
 
-  const [filter, setFilter] = useState<PairFilter>('all');
-  const [sort, setSort] = useState<PairSort>('trades');
+  const setFilter = useCallback(
+    (filter?: PairFilter) => {
+      nav({
+        search: (s) => ({ ...s, filter }),
+        replace: true,
+        resetScroll: false,
+      });
+    },
+    [nav],
+  );
+
+  const setSort = useCallback(
+    (sort?: PairSort) => {
+      nav({
+        search: (s) => ({ ...s, sort }),
+        replace: true,
+        resetScroll: false,
+      });
+    },
+    [nav],
+  );
 
   const rewards = useRewards();
   const trending = useTrending();
@@ -72,7 +84,7 @@ export const PairLayout: FC<Props> = ({ url }) => {
     if (!ordered) return;
     const map: TradeMap = {};
     // On portfolio we take only the active strategy's trades
-    if (url === '/portfolio' || getType(search) === 'wallet') {
+    if (url.includes('/portfolio') || getType(search) === 'wallet') {
       const record: Record<string, StrategyTrade> = {};
       for (const strategyTrade of trending.data?.tradeCount || []) {
         record[strategyTrade.id] = strategyTrade;
@@ -121,7 +133,7 @@ export const PairLayout: FC<Props> = ({ url }) => {
 
   const allPairs = useMemo(() => {
     if (!ordered || !tradesByPair) return [];
-    const rewardPairs = new Set(rewards.data?.map((r) => r.pair));
+    const rewardPairs = new Set(rewards.data ?? []);
 
     const map: Record<string, RawPairRow> = {};
     for (const strategy of ordered) {
@@ -166,17 +178,17 @@ export const PairLayout: FC<Props> = ({ url }) => {
       tradeCount: prettifyNumber(row.tradeCount, { isInteger: true }),
       tradeCount24h: prettifyNumber(row.tradeCount24h, { isInteger: true }),
       strategyAmount: prettifyNumber(row.strategyAmount, { isInteger: true }),
-      liquidity: prettifyNumber(row.liquidity, { currentCurrency }),
+      liquidity: getUsdPrice(row.liquidity),
     }));
-  }, [sorted, currentCurrency]);
+  }, [sorted]);
 
   const liquidityAmount = useMemo(() => {
     const amount = filtered.reduce(
       (acc, p) => acc.add(p.liquidity),
       new SafeDecimal(0),
     );
-    return prettifyNumber(amount, { currentCurrency });
-  }, [filtered, currentCurrency]);
+    return getUsdPrice(amount);
+  }, [filtered]);
 
   if (isPending || rewards.isPending || trending.isPending) {
     return (

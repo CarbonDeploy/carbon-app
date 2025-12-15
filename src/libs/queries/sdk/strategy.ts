@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { isAddress, getAddress, TransactionRequest } from 'ethers';
+import { isAddress, getAddress } from 'ethers';
 import { useWagmi } from 'libs/wagmi';
 import { Token } from 'libs/tokens';
 import { QueryKey } from 'libs/queries/queryKey';
@@ -11,7 +11,6 @@ import {
   EncodedStrategyBNStr,
   StrategyUpdate,
   Strategy as SDKStrategy,
-  PopulatedTransaction,
 } from '@bancor/carbon-sdk';
 import { MarginalPriceOptions } from '@bancor/carbon-sdk/strategy-management';
 import { carbonSDK } from 'libs/sdk';
@@ -38,6 +37,12 @@ import { useMemo } from 'react';
 type AnySDKStrategy = SDKStrategy | SDKGradientStrategy;
 
 // READ
+const getStatus = (offCurve: boolean, noBudget: boolean) => {
+  if (offCurve && noBudget) return 'inactive';
+  if (offCurve) return 'paused';
+  if (noBudget) return 'noBudget';
+  return 'active';
+};
 
 // TODO: build strategy outside the useQuery to parallelize token query & strategy query
 const buildStrategiesHelper = async (
@@ -65,14 +70,7 @@ const buildStrategiesHelper = async (
 
       const noBudget = sellBudget.isZero() && buyBudget.isZero();
 
-      const status =
-        noBudget && offCurve
-          ? 'inactive'
-          : offCurve
-            ? 'paused'
-            : noBudget
-              ? 'noBudget'
-              : 'active';
+      const status = getStatus(offCurve, noBudget);
 
       // ATTENTION *****************************
       // This is the buy order | UI order 0 and CONTRACT order 1
@@ -203,7 +201,7 @@ export const useGetStrategyList = (ids: string[]) => {
 
 /** We need to add options to disable because we want to use different hooks for explorer  */
 export const useGetAllStrategies = (options: { enabled: boolean }) => {
-  const { isInitialized } = useCarbonInit();
+  const { isEnabled } = useCarbonInit();
   const { isPending, getTokenById } = useTokens();
 
   return useQuery<AnyStrategy[]>({
@@ -213,9 +211,8 @@ export const useGetAllStrategies = (options: { enabled: boolean }) => {
       const strategies = all.map((item) => item.strategies).flat();
       return buildStrategiesHelper(strategies, getTokenById);
     },
-    enabled: options?.enabled && !isPending && isInitialized,
+    enabled: options?.enabled && !isPending && isEnabled,
     staleTime: ONE_DAY_IN_MS,
-    retry: false,
   });
 };
 
@@ -343,18 +340,6 @@ export const useTokenStrategies = (token?: string) => {
 
 // WRITE
 
-// TODO: remove when sdk is using ethers v6
-export const toTransactionRequest = (tx: PopulatedTransaction) => {
-  const next: TransactionRequest = structuredClone(tx) as any;
-  if (tx.gasLimit) next.gasLimit = BigInt(tx.gasLimit._hex);
-  if (tx.gasPrice) next.gasPrice = BigInt(tx.gasPrice._hex);
-  if (tx.value) next.value = BigInt(tx.value._hex);
-  if (tx.maxFeePerGas) next.maxFeePerGas = BigInt(tx.maxFeePerGas._hex);
-  if (tx.maxPriorityFeePerGas)
-    next.maxFeePerGas = BigInt(tx.maxPriorityFeePerGas._hex);
-  return next;
-};
-
 const getFieldsToUpdate = (orders: EditOrders, strategy: AnyStrategy) => {
   const { buy, sell } = orders;
   const fields: Partial<StrategyUpdate> = {};
@@ -426,7 +411,7 @@ export const useCreateStrategyQuery = () => {
         ],
       };
 
-      return sendTransaction(toTransactionRequest(unsignedTx));
+      return sendTransaction(unsignedTx);
     },
   });
 };
@@ -470,7 +455,7 @@ export const useUpdateStrategyQuery = (strategy: AnyStrategy) => {
         ],
       };
 
-      return sendTransaction(toTransactionRequest(unsignedTx));
+      return sendTransaction(unsignedTx);
     },
   });
 };
@@ -491,7 +476,7 @@ export const usePauseStrategyQuery = () => {
         },
       );
 
-      return sendTransaction(toTransactionRequest(unsignedTx));
+      return sendTransaction(unsignedTx);
     },
   });
 };
@@ -503,7 +488,7 @@ export const useDeleteStrategyQuery = () => {
     mutationFn: async ({ id }: DeleteStrategyParams) => {
       const unsignedTx = await carbonSDK.deleteStrategy(id);
 
-      return sendTransaction(toTransactionRequest(unsignedTx));
+      return sendTransaction(unsignedTx);
     },
   });
 };

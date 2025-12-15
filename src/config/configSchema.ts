@@ -51,10 +51,7 @@ export const AppConfigSchema = v.object({
   }),
   defaultTokenPair: v.tuple([v.string(), v.string()]),
   popularPairs: v.array(v.tuple([v.string(), v.string()])),
-  popularTokens: v.object({
-    base: v.array(v.string()),
-    quote: v.array(v.string()),
-  }),
+  popularTokens: v.array(v.string()),
   tokenListOverride: v.array(
     v.object({
       name: v.string(),
@@ -133,7 +130,13 @@ export const AppConfigSchema = v.object({
     showTerms: v.optional(v.boolean()),
     showPrivacy: v.optional(v.boolean()),
     showCart: v.optional(v.boolean()),
-    rewardUrl: v.optional(v.string()),
+    rewards: v.optional(
+      v.object({
+        url: v.string(),
+        logo: v.string(),
+        list: v.optional(v.array(v.string())),
+      }),
+    ),
     walkthroughId: v.optional(v.string()),
   }),
 });

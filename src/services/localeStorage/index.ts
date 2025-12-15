@@ -2,9 +2,7 @@ import { ManagedLocalStorage } from 'utils/managedLocalStorage';
 import { Token } from 'libs/tokens';
 import { Notification } from 'libs/notifications';
 import { TradePair } from 'components/strategies/common/types';
-import { ChooseTokenCategory } from 'libs/modals/modals/ModalTokenList/ModalTokenListContent';
 import { APP_ID, APP_VERSION, NETWORK } from 'utils/constants';
-import { FiatSymbol } from 'utils/carbonApi';
 import {
   Migration,
   migrateAndRemoveItem,
@@ -27,13 +25,11 @@ export interface LocalStorageSchema {
   importedTokens: Token[];
   [k: `notifications-${string}`]: Notification[];
   [k: `favoriteTradePairs-${string}`]: TradePair[];
-  [k: `favoriteTokens-${string}`]: Token[];
+  [k: `favoriteTokens-${string}`]: string[];
   tradePair: [string, string];
-  currentCurrency: FiatSymbol;
   tradeSlippage: string;
   tradeDeadline: string;
   tradeMaxOrders: string;
-  chooseTokenCategory: ChooseTokenCategory;
   carbonControllerAddress: string;
   voucherContractAddress: string;
   batcherContractAddress: string;
@@ -50,14 +46,17 @@ export interface LocalStorageSchema {
   liquidityMatrix: Record<string, LiquidityMatrixSearch>;
   strategyLayout: StrategyLayout;
   carts: Record<string, Cart>;
-  hasWalkthrough: boolean;
   tacToTonAddress: Record<string, string>;
+  haveSeen: 'rewards'[];
 
   /* @deprecated */
   strategyOverviewFilter?: void;
   strategyOverviewSort?: void;
   tokenPairsCache: { pairs: TradePair[]; timestamp: number };
   tradePairsCategory: any;
+  hasWalkthrough: boolean;
+  chooseTokenCategory: string;
+  currentCurrency: string;
 }
 
 enum EnumStrategySort {
@@ -157,6 +156,28 @@ const migrations: Migration[] = [
       const key = prevFormattedKey.slice(prefix.length);
       if (!key) return;
       const nextFormattedKey = ['carbon', NETWORK, 'v1.4', key].join('-');
+      migrateAndRemoveItem({ prevFormattedKey, nextFormattedKey });
+    },
+  },
+  {
+    migrate: (prevFormattedKey) => {
+      const prefix = `carbon-${NETWORK}-v1.4-`;
+      if (prevFormattedKey.includes(`${prefix}favoriteTokens`)) {
+        const current = localStorage.getItem(prevFormattedKey);
+        const tokens = JSON.parse(current ?? '[]') as Token[];
+        const addresses: string[] = [];
+        for (const token of tokens) {
+          if (typeof token?.address === 'string') {
+            addresses.push(token.address);
+          }
+        }
+        localStorage.setItem(prevFormattedKey, JSON.stringify(addresses));
+      }
+      const isMatch = prevFormattedKey.startsWith(prefix);
+      if (!isMatch) return;
+      const key = prevFormattedKey.slice(prefix.length);
+      if (!key) return;
+      const nextFormattedKey = ['carbon', NETWORK, 'v1.5', key].join('-');
       migrateAndRemoveItem({ prevFormattedKey, nextFormattedKey });
     },
   },

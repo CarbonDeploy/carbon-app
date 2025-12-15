@@ -1,7 +1,7 @@
 import { Tooltip } from 'components/common/tooltip/Tooltip';
 import { NewTabLink, externalLinks } from 'libs/routing';
-import { ReactComponent as IconLink } from 'assets/icons/link.svg';
-import { ReactComponent as IconTooltip } from 'assets/icons/tooltip.svg';
+import IconLink from 'assets/icons/link.svg?react';
+import IconTooltip from 'assets/icons/tooltip.svg?react';
 import { formatNumberWithApproximation } from 'utils/helpers';
 import { SafeDecimal } from 'libs/safedecimal';
 import { useCallback } from 'react';
@@ -36,7 +36,7 @@ export const SimResultSummaryRoi = ({ portfolioRoi }: Props) => {
         from={0.0}
         to={portfolioRoi}
         formatFn={portfolioRoiFormatter}
-        duration={2}
+        duration={2000}
         data-testid="summary-roi"
       />
     </article>

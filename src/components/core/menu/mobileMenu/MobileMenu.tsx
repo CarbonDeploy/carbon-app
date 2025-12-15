@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Link, useRouterState, useMatchRoute } from 'libs/routing';
-import { ReactComponent as IconDots } from 'assets/icons/three-dots.svg';
+import IconDots from 'assets/icons/three-dots.svg?react';
 import { useModal } from 'hooks/useModal';
 import { getMenuItems } from 'components/core/menu';
 import { useWagmi } from 'libs/wagmi';
@@ -40,7 +40,7 @@ export const MobileMenu: FC = () => {
       <button
         type="button"
         aria-haspopup="true"
-        onClick={() => openModal('burgerMenu', undefined)}
+        onClick={() => openModal('burgerMenu')}
         className="flex px-8 py-4 cursor-pointer items-center hover:text-white"
       >
         <IconDots className="w-24" />

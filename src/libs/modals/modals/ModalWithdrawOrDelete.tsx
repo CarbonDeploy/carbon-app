@@ -1,30 +1,29 @@
 import { useModal } from 'hooks/useModal';
-import { ModalFC } from 'libs/modals/modals.types';
+import { ModalProps } from 'libs/modals/modals.types';
 import { IconTitleText } from 'components/common/iconTitleText/IconTitleText';
-import { ModalOrMobileSheet } from 'libs/modals/ModalOrMobileSheet';
-import { ReactComponent as IconDelete } from 'assets/icons/delete.svg';
+import { Modal, ModalHeader } from 'libs/modals/Modal';
+import IconDelete from 'assets/icons/delete.svg?react';
 
-export type ModalWithdrawOrDeleteData = {
+interface ModalWithdrawOrDeleteData {
   onDelete: () => void;
   onWithdraw: () => void;
-};
+}
 
-export const ModalWithdrawOrDelete: ModalFC<ModalWithdrawOrDeleteData> = ({
+export default function ModalWithdrawOrDelete({
   id,
   data: { onDelete, onWithdraw },
-}) => {
+}: ModalProps<ModalWithdrawOrDeleteData>) {
   const { closeModal } = useModal();
 
   return (
-    <ModalOrMobileSheet id={id}>
-      <div className="my-20">
-        <IconTitleText
-          variant="error"
-          icon={<IconDelete />}
-          title="This strategy will become inactive once the budget is removed"
-          text="Delete this strategy to keep things tidy"
-        />
-      </div>
+    <Modal id={id} className="grid gap-16">
+      <ModalHeader id={id} />
+      <IconTitleText
+        variant="error"
+        icon={<IconDelete />}
+        title="This strategy will become inactive once the budget is removed"
+        text="Delete this strategy to keep things tidy"
+      />
       <button
         className="btn-primary-gradient"
         onClick={() => {
@@ -43,6 +42,6 @@ export const ModalWithdrawOrDelete: ModalFC<ModalWithdrawOrDeleteData> = ({
       >
         Withdraw Only
       </button>
-    </ModalOrMobileSheet>
+    </Modal>
   );
-};
+}
