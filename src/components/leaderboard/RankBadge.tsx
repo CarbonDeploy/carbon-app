@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { cn } from 'utils/helpers';
-import { ReactComponent as IconStar } from 'assets/icons/star-fill.svg';
+import IconStar from 'assets/icons/star-fill.svg?react';
 
 interface RankBadgeProps {
   rank: number;

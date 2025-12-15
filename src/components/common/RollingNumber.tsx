@@ -23,7 +23,6 @@ export const RollingNumber = ({
   const ref = useRef<HTMLParagraphElement>(null);
   const anims = useRef<Promise<Animation>[]>(null);
   const lastTrades = useRef(0);
-  const initDelta = 0;
 
   useEffect(() => {
     if (typeof value !== 'number' || !value) return;
