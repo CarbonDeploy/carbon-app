@@ -41,8 +41,8 @@ export const RollingNumber = ({
           const anim = letters[i]?.animate(
             [{ transform: `translateY(-${v}0%)` }],
             {
-              duration: 1000,
-              delay: i * 100,
+              duration: 1250,
+              delay: i * 200,
               fill: 'forwards',
               easing: 'cubic-bezier(1,-0.54,.65,1.46)',
             },

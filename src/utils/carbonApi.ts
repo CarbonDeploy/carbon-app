@@ -15,6 +15,8 @@ import {
 import { lsService } from 'services/localeStorage';
 import { Trending } from 'libs/queries/extApi/tradeCount';
 import { Reward } from 'libs/queries/extApi/rewards';
+import { PairROI } from 'libs/queries/extApi/roi';
+
 import { Token } from 'libs/tokens';
 import { StrategyAPIResult } from 'libs/queries/extApi/strategy';
 
@@ -88,6 +90,7 @@ const carbonApi = {
   getTrending: () => get<Trending>('analytics/trending'),
   getReward: (pair: string) => get<Reward>('merkle/data', { pair }),
   getAllRewards: () => get<Reward[]>('merkle/all-data'),
+  getROI: () => get<PairROI[]>('roi'),
 };
 
 export { carbonApi };

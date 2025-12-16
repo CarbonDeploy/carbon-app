@@ -21,6 +21,7 @@ const paths: Record<string, Pathnames> = {
   debug: '/debug',
   terms: '/terms',
   privacy: '/privacy',
+  swap: '/swap',
 };
 
 export const MainContent: FC = () => {
@@ -41,11 +42,13 @@ export const MainContent: FC = () => {
     }
   }, [location, location.pathname]);
 
-  if (
+  const shouldBypassNetworkChecks =
     location.pathname === paths.debug ||
     location.pathname === paths.terms ||
-    location.pathname === paths.privacy
-  ) {
+    location.pathname === paths.privacy ||
+    location.pathname.startsWith(paths.swap);
+
+  if (shouldBypassNetworkChecks) {
     return <Outlet />;
   }
 

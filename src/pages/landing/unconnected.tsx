@@ -21,7 +21,7 @@ const types = [
     trades: [
       {
         name: 'Swap',
-        to: '/trade/market' as const,
+        to: '/swap' as const,
         search: {},
         icon: <IconMarket className="size-24" />,
       },
@@ -57,7 +57,7 @@ const types = [
   {
     title: 'Advanced',
     description:
-      'Customizable strategies for scaling, and automating buy low, sell high trades - unique to Carbon DeFi.',
+      'Customizable strategies for scaling, and automating buy low, sell high trades - unique to DNAX DeFi.',
     trades: [
       {
         name: 'Range Order',
@@ -189,7 +189,7 @@ export const UnconnectedLandingPage = () => {
         </ul>
       </article>
       <article className="grid gap-24">
-        <h2 className="text-center text-3xl">Carbon DeFi User Benefits</h2>
+        <h2 className="text-center text-3xl">DNAX DeFi User Benefits</h2>
         <ul className="flex justify-center flex-wrap gap-40">
           <li className="flex gap-8 items-center">
             <IconShield className="size-20" />

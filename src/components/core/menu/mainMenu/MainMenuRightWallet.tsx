@@ -26,27 +26,37 @@ export const MainMenuRightWallet: FC = () => {
   const selectedWallet = currentConnector?.name;
 
   const { data: ensName } = useGetEnsFromAddress(user || '');
+  const allowUnsupportedNetwork = location.pathname.startsWith('/swap');
 
   const buttonVariant = useMemo(() => {
     if (isUserBlocked) return 'btn-error-gradient text-16';
-    if (!isSupportedNetwork) return 'btn-error-gradient text-16';
+    if (!isSupportedNetwork && !allowUnsupportedNetwork)
+      return 'btn-error-gradient text-16';
     if (!user) return 'btn-primary-gradient px-16 py-8 text-16';
     return 'btn-on-background text-16';
-  }, [isSupportedNetwork, isUserBlocked, user]);
+  }, [allowUnsupportedNetwork, isSupportedNetwork, isUserBlocked, user]);
 
   const buttonText = useMemo(() => {
     if (isUserBlocked) return 'Wallet Blocked';
-    if (!isSupportedNetwork) return 'Wrong Network';
+    if (!isSupportedNetwork && !allowUnsupportedNetwork) return 'Wrong Network';
     if (!user) {
       if (location.pathname === '/') return 'Launch App';
       return 'Connect Wallet';
     }
     return shortenString(ensName || user);
-  }, [ensName, isSupportedNetwork, isUserBlocked, location.pathname, user]);
+  }, [
+    allowUnsupportedNetwork,
+    ensName,
+    isSupportedNetwork,
+    isUserBlocked,
+    location.pathname,
+    user,
+  ]);
 
   const buttonIcon = useMemo(() => {
     if (isUserBlocked) return <IconWarning className={iconClass} />;
-    if (!isSupportedNetwork) return <IconWarning className={iconClass} />;
+    if (!isSupportedNetwork && !allowUnsupportedNetwork)
+      return <IconWarning className={iconClass} />;
     if (!user) return;
     return (
       <WalletIcon
@@ -57,6 +67,7 @@ export const MainMenuRightWallet: FC = () => {
       />
     );
   }, [
+    allowUnsupportedNetwork,
     isUserBlocked,
     isSupportedNetwork,
     user,
@@ -102,6 +113,8 @@ const ConnectedMenu: FC = () => {
   const { setMenuOpen } = useMenuCtx();
   const { user, disconnect, isSupportedNetwork, switchNetwork } = useWagmi();
   const nav = useNavigate();
+  const { location } = useRouterState();
+  const allowUnsupportedNetwork = location.pathname.startsWith('/swap');
 
   const signout = async () => {
     await disconnect();
@@ -117,7 +130,7 @@ const ConnectedMenu: FC = () => {
 
   return (
     <div role="menu" className="font-normal grid gap-4 text-white">
-      {isSupportedNetwork ? (
+      {isSupportedNetwork || allowUnsupportedNetwork ? (
         <>
           <button
             role="menuitem"

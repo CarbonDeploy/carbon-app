@@ -25,6 +25,11 @@ export const getMenuItems = (user?: string) => {
       href: '/explore',
       testid: 'explore-page',
     },
+    {
+      label: 'Leaderboard',
+      href: '/leaderboard',
+      testid: 'leaderboard-page',
+    },
   ];
   if (user) {
     items.splice(1, 0, {
@@ -70,6 +75,11 @@ export const menuItems: MenuItem[] = [
     label: 'Explore',
     href: '/explore',
     testid: 'explore-page',
+  },
+  {
+    label: 'Leaderboard',
+    href: '/leaderboard',
+    testid: 'leaderboard-page',
   },
   ...(!config.ui.showSimulator
     ? []

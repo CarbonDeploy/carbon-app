@@ -49,7 +49,7 @@ const getActivityCSV = (activities: Activity[]) => {
   const body = activities.map((activity) => {
     const { strategy, changes, blockNumber, txHash } = activity;
     const { base, quote } = strategy;
-    const date = new Date(activity.date).toLocaleDateString();
+    const date = new Date(activity.date).toISOString();
     const min = (order: ActivityOrder) => {
       if ('min' in order) return order.min;
       return SafeDecimal.min(order._sP_, order._eP_).toString();
