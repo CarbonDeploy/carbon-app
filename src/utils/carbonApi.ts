@@ -50,7 +50,7 @@ const carbonApi = {
   getCheck: async (): Promise<boolean> => {
     if (config.mode === 'development') return false;
     const res = await fetch(`/api/check`, { cache: 'no-store' });
-    return res.json();
+    return false;
   },
   getTokens: () => {
     return get<Token[]>('tokens');

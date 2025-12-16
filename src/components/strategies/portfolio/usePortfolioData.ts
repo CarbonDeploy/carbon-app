@@ -33,7 +33,8 @@ export const usePortfolioData = ({ strategies }: Props) => {
     const unsorted = strategies.reduce(
       ((map) => (acc: PortfolioData[], strategy) => {
         const handleData = (token: Token, order: Order) => {
-          const tokenPrice = prices[token.address] ?? 0;
+          const tokenAddress = token.address.toLowerCase();
+          const tokenPrice = prices[tokenAddress] ?? prices[token.address];
           const amount = new SafeDecimal(order.budget);
 
           let item = map.get(token.symbol);
