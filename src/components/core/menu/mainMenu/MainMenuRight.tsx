@@ -9,6 +9,7 @@ import { MainMenuCart } from './MainMenuCart';
 import { lsService } from 'services/localeStorage';
 import { Link } from '@tanstack/react-router';
 import { MainMenuRightReward } from './MainMenuRightRewards';
+import { MainMenuRightPoints } from './MainMenuRightPoints';
 import config from 'config';
 
 const TonConnectBtn = lazy(() => import('libs/ton/TonConnectBtn'));
@@ -48,6 +49,7 @@ export const MainMenuRight: FC = () => {
     <div className="flex items-center gap-8 sm:gap-16">
       <TenderlyForkAlert />
       <MainMenuRightReward />
+      <MainMenuRightPoints />
       {config.ui.showCart && <MainMenuCart />}
       <MainMenuRightNotifications />
       {config.network.name !== 'TON' && (
