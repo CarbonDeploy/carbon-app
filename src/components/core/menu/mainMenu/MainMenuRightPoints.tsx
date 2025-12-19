@@ -1,5 +1,5 @@
 import { FC } from 'react';
-//import { Link } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 import { useWagmi } from 'libs/wagmi';
 import { useUserPoints } from 'libs/queries/extApi/userPoints';
 import { PointsAnimation } from './MainMenuRightPointsAnimated';
@@ -22,8 +22,8 @@ export const MainMenuRightPoints: FC = () => {
 
   return (
     <PointsAnimation
-      //as={Link}
-      //to="/leaderboard/users"
+      as={Link}
+      to="/leaderboard/users"
       borderRadius="1.75rem"
       className="bg-black text-white text-16 flex items-center gap-8 px-16 py-8 glass-shadow cursor-pointer"
       borderClassName="btn-on-background brightness-150 opacity-100"
