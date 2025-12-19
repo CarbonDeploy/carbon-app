@@ -26,7 +26,7 @@ export const getMenuItems = (user?: string) => {
       testid: 'explore-page',
     },
     {
-      label: 'Leaderboard',
+      label: 'High Performers',
       href: '/leaderboard',
       testid: 'leaderboard-page',
     },
