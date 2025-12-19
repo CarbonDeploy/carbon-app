@@ -71,11 +71,6 @@ export const LeaderboardSection: FC = () => {
 
   return (
     <div className="grid gap-16 md:gap-24">
-      <div className="bg-main-900/20 text-white/60 flex items-center gap-16 rounded-full px-16 md:px-20 py-10 border border-main-500/40 text-12 md:text-14 w-fit">
-        <span className="font-medium">
-          Total Pairs: <span className="text-white">{rankedPairs.length}</span>
-        </span>
-      </div>
       {aboveBreakpoint('lg') ? (
         <LeaderboardTable pairs={rankedPairs} />
       ) : (

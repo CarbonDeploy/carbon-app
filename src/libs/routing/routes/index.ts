@@ -39,7 +39,11 @@ import { cartPage } from './cart';
 import { liquidityMatrixPage } from './liquidity-matrix';
 import { landingPage } from './landing';
 import { swapPage } from './swap';
-import { leaderboardPage } from './leaderboard';
+import {
+  leaderboardLayout,
+  leaderboardPointsPage,
+  leaderboardPairsPage,
+} from './leaderboard';
 import {
   simulatorInputOverlappingRoute,
   simulatorInputRecurringRoute,
@@ -55,7 +59,7 @@ export const routeTree = rootRoute.addChildren([
   cartPage,
   landingPage,
   swapPage,
-  leaderboardPage,
+  leaderboardLayout.addChildren([leaderboardPointsPage, leaderboardPairsPage]),
   strategyPageRoot.addChildren([strategyPage, strategyPageRedirect]),
   oldCreateStrategies,
   editStrategyLayout.addChildren([

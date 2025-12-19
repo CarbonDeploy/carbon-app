@@ -35,6 +35,7 @@ export const QueryKey = {
   reward: (pair: string) => [...extAPI, 'reward', pair],
   rewards: () => [...extAPI, 'reward', 'all'],
   userPoints: (address: string) => [...extAPI, 'user-points', address],
+  pointsLeaderboard: () => [...extAPI, 'points-leaderboard'],
 
   strategy: (id: string) => [...sdk, 'strategy', id],
   strategyList: (ids: string[]) => [...sdk, 'strategy', ...ids],

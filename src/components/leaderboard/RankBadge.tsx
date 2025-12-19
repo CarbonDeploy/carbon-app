@@ -28,13 +28,22 @@ export const RankBadge: FC<RankBadgeProps> = ({ rank, size = 'md' }) => {
     );
   }
 
-  if (isSmall) {
-    return (
-      <div className="bg-main-600 flex size-40 items-center justify-center rounded-full">
-        <span className="text-14 text-white/60 font-medium">{rank}</span>
-      </div>
-    );
-  }
-
-  return <span className="text-14 text-white/60 font-medium">#{rank}</span>;
+  // Show badge for all ranks (both small and medium sizes)
+  return (
+    <div
+      className={cn(
+        'bg-main-600 flex items-center justify-center rounded-full',
+        isSmall ? 'size-40' : 'size-40',
+      )}
+    >
+      <span
+        className={cn(
+          'text-white/60 font-medium',
+          isSmall ? 'text-14' : 'text-14',
+        )}
+      >
+        {rank}
+      </span>
+    </div>
+  );
 };

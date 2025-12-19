@@ -53,7 +53,6 @@ const LeaderboardCard: FC<LeaderboardCardProps> = ({ pairData }) => {
           <RankBadge rank={rank} size="sm" />
 
           <div className="flex flex-col gap-4">
-            <span className="text-12 text-white/60">Rank #{rank}</span>
             <div className="flex items-center gap-8">
               <TokensOverlap size={24} tokens={[baseToken, quoteToken]} />
               <h3 className="text-16 font-medium text-white">

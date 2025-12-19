@@ -33,3 +33,30 @@ export const useUserPoints = (walletAddress?: string) => {
     retry: 2,
   });
 };
+
+const fetchPointsLeaderboard = async (): Promise<UserPointsResponse[]> => {
+  try {
+    const url = `https://dna-perp-dex-prod-y7fqo.ondigitalocean.app/api/api/users/leaderboard`;
+    const response = await fetch(url);
+    if (!response.ok) {
+      console.error(
+        `Failed to fetch points leaderboard: ${response.statusText}`,
+      );
+      return [];
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching points leaderboard:', error);
+    return [];
+  }
+};
+
+export const usePointsLeaderboard = () => {
+  return useQuery({
+    queryKey: QueryKey.pointsLeaderboard(),
+    queryFn: () => fetchPointsLeaderboard(),
+    staleTime: ONE_DAY_IN_MS / 24, // 1 hour
+    refetchOnWindowFocus: false,
+    retry: 2,
+  });
+};

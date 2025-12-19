@@ -3,3 +3,7 @@ export * from './LeaderboardTable';
 export * from './LeaderboardList';
 export * from './RankBadge';
 export * from './utils';
+export * from './LeaderboardTabs';
+export * from './PointsLeaderboardSection';
+export * from './PointsLeaderboardTable';
+export * from './PointsLeaderboardList';
