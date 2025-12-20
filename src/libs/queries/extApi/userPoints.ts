@@ -10,17 +10,36 @@ export interface UserPointsResponse {
   points: number;
 }
 
+const BASE_URL =
+  'https://dna-perp-dex-prod-y7fqo.ondigitalocean.app/api/api/users';
+
 const fetchUserPoints = async (
   walletAddress: string,
 ): Promise<UserPointsResponse> => {
-  const url = `https://dna-perp-dex-prod-y7fqo.ondigitalocean.app/api/api/users/${walletAddress}/volume`;
-  const response = await fetch(url);
+  try {
+    const url = `${BASE_URL}/${walletAddress}/volume`;
+    const response = await fetch(url);
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch user points: ${response.statusText}`);
+    if (response.status === 404) {
+      return {
+        walletAddress,
+        dexVolume: 0,
+        spotVolume: 0,
+        totalVolume: 0,
+        points: 0,
+      };
+    }
+
+    return response.json();
+  } catch (error) {
+    return {
+      walletAddress,
+      dexVolume: 0,
+      spotVolume: 0,
+      totalVolume: 0,
+      points: 0,
+    };
   }
-
-  return response.json();
 };
 
 export const useUserPoints = (walletAddress?: string) => {
@@ -36,14 +55,8 @@ export const useUserPoints = (walletAddress?: string) => {
 
 const fetchPointsLeaderboard = async (): Promise<UserPointsResponse[]> => {
   try {
-    const url = `https://dna-perp-dex-prod-y7fqo.ondigitalocean.app/api/api/users/*/volume`;
+    const url = `${BASE_URL}/*/volume`;
     const response = await fetch(url);
-    if (!response.ok) {
-      console.error(
-        `Failed to fetch points leaderboard: ${response.statusText}`,
-      );
-      return [];
-    }
     return response.json();
   } catch (error) {
     console.error('Error fetching points leaderboard:', error);
