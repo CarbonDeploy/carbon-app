@@ -12,16 +12,16 @@ export interface LeaderboardTab {
 
 const tabs: LeaderboardTab[] = [
   {
-    label: 'Pairs',
-    href: 'pairs',
-    icon: <IconPairs className="hidden md:block size-24" />,
-    testid: 'pairs-tab',
-  },
-  {
     label: 'Users',
     href: 'users',
     icon: <IconWallet className="hidden md:block size-24" />,
     testid: 'users-tab',
+  },
+  {
+    label: 'Pairs',
+    href: 'pairs',
+    icon: <IconPairs className="hidden md:block size-24" />,
+    testid: 'pairs-tab',
   },
 ];
 

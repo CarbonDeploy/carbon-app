@@ -14,7 +14,7 @@ export const leaderboardLayout = createRoute({
     for (const end of ends) {
       if (location.pathname.endsWith(end)) {
         throw redirect({
-          to: '/leaderboard/pairs',
+          to: '/leaderboard/users',
           replace: true,
         } as any);
       }

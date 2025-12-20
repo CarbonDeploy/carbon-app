@@ -36,7 +36,7 @@ export const useUserPoints = (walletAddress?: string) => {
 
 const fetchPointsLeaderboard = async (): Promise<UserPointsResponse[]> => {
   try {
-    const url = `https://dna-perp-dex-prod-y7fqo.ondigitalocean.app/api/api/users/leaderboard`;
+    const url = `https://dna-perp-dex-prod-y7fqo.ondigitalocean.app/api/api/users/*/volume`;
     const response = await fetch(url);
     if (!response.ok) {
       console.error(
